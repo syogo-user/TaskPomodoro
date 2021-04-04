@@ -7,14 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9176C3112618671C0005EF58 /* CommonConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176C3102618671C0005EF58 /* CommonConst.swift */; };
+		9176F55A26195D8500F6FA23 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F55926195D8500F6FA23 /* Task.swift */; };
+		9176F5652619EA4600F6FA23 /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F5642619EA4600F6FA23 /* TaskListViewController.swift */; };
 		91B3EEE0261838D50096519B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEDF261838D50096519B /* AppDelegate.swift */; };
 		91B3EEE2261838D50096519B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE1261838D50096519B /* SceneDelegate.swift */; };
-		91B3EEE4261838D50096519B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE3261838D50096519B /* ViewController.swift */; };
-		91B3EEE7261838D50096519B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91B3EEE5261838D50096519B /* Main.storyboard */; };
+		91B3EEE4261838D50096519B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE3261838D50096519B /* HomeViewController.swift */; };
 		91B3EEE9261838D60096519B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91B3EEE8261838D60096519B /* Assets.xcassets */; };
 		91B3EEEC261838D60096519B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91B3EEEA261838D60096519B /* LaunchScreen.storyboard */; };
 		91B3EEF7261838D60096519B /* TaskPomodoroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEF6261838D60096519B /* TaskPomodoroTests.swift */; };
 		91B3EF02261838D60096519B /* TaskPomodoroUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF01261838D60096519B /* TaskPomodoroUITests.swift */; };
+		91B3EF1E261849BF0096519B /* BottomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF1D261849BF0096519B /* BottomControlView.swift */; };
+		91B3EF2626184ABF0096519B /* TopControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2526184ABF0096519B /* TopControlView.swift */; };
+		91B3EF2B26184B330096519B /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2A26184B330096519B /* CardView.swift */; };
+		91B3EF3026184B5D0096519B /* CardInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */; };
+		91B3EF3526184B790096519B /* CardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF3426184B790096519B /* CardImageView.swift */; };
+		91B3EF3B26184BA10096519B /* UIImage-Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF3A26184BA10096519B /* UIImage-Extention.swift */; };
+		91B3EF4326184BC00096519B /* UIView-Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF4226184BC00096519B /* UIView-Extention.swift */; };
+		91B3EF4826184BF70096519B /* UIColor-Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF4726184BF70096519B /* UIColor-Extention.swift */; };
+		91B3EF4D26184C200096519B /* UIButton-Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF4C26184C200096519B /* UIButton-Extention.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,11 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9176C3102618671C0005EF58 /* CommonConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonConst.swift; sourceTree = "<group>"; };
+		9176F55926195D8500F6FA23 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		9176F5642619EA4600F6FA23 /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
 		91B3EEDC261838D50096519B /* TaskPomodoro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskPomodoro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B3EEDF261838D50096519B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91B3EEE1261838D50096519B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		91B3EEE3261838D50096519B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		91B3EEE6261838D50096519B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		91B3EEE3261838D50096519B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		91B3EEE8261838D60096519B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91B3EEEB261838D60096519B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91B3EEED261838D60096519B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +62,15 @@
 		91B3EEFD261838D60096519B /* TaskPomodoroUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskPomodoroUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B3EF01261838D60096519B /* TaskPomodoroUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPomodoroUITests.swift; sourceTree = "<group>"; };
 		91B3EF03261838D60096519B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		91B3EF1D261849BF0096519B /* BottomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomControlView.swift; sourceTree = "<group>"; };
+		91B3EF2526184ABF0096519B /* TopControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopControlView.swift; sourceTree = "<group>"; };
+		91B3EF2A26184B330096519B /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfoLabel.swift; sourceTree = "<group>"; };
+		91B3EF3426184B790096519B /* CardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageView.swift; sourceTree = "<group>"; };
+		91B3EF3A26184BA10096519B /* UIImage-Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage-Extention.swift"; sourceTree = "<group>"; };
+		91B3EF4226184BC00096519B /* UIView-Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView-Extention.swift"; sourceTree = "<group>"; };
+		91B3EF4726184BF70096519B /* UIColor-Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor-Extention.swift"; sourceTree = "<group>"; };
+		91B3EF4C26184C200096519B /* UIButton-Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton-Extention.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +98,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9176F55826195D6A00F6FA23 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9176F55926195D8500F6FA23 /* Task.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		91B3EED3261838D50096519B = {
 			isa = PBXGroup;
 			children = (
@@ -99,11 +129,14 @@
 		91B3EEDE261838D50096519B /* TaskPomodoro */ = {
 			isa = PBXGroup;
 			children = (
+				9176F55826195D6A00F6FA23 /* Model */,
+				91B3EF3926184B8A0096519B /* Extention */,
+				91B3EF1C2618499F0096519B /* Views */,
+				91B3EF182618492A0096519B /* ViewController */,
+				91B3EEE8261838D60096519B /* Assets.xcassets */,
 				91B3EEDF261838D50096519B /* AppDelegate.swift */,
 				91B3EEE1261838D50096519B /* SceneDelegate.swift */,
-				91B3EEE3261838D50096519B /* ViewController.swift */,
-				91B3EEE5261838D50096519B /* Main.storyboard */,
-				91B3EEE8261838D60096519B /* Assets.xcassets */,
+				9176C3102618671C0005EF58 /* CommonConst.swift */,
 				91B3EEEA261838D60096519B /* LaunchScreen.storyboard */,
 				91B3EEED261838D60096519B /* Info.plist */,
 			);
@@ -126,6 +159,38 @@
 				91B3EF03261838D60096519B /* Info.plist */,
 			);
 			path = TaskPomodoroUITests;
+			sourceTree = "<group>";
+		};
+		91B3EF182618492A0096519B /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				91B3EEE3261838D50096519B /* HomeViewController.swift */,
+				9176F5642619EA4600F6FA23 /* TaskListViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		91B3EF1C2618499F0096519B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91B3EF1D261849BF0096519B /* BottomControlView.swift */,
+				91B3EF2526184ABF0096519B /* TopControlView.swift */,
+				91B3EF2A26184B330096519B /* CardView.swift */,
+				91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */,
+				91B3EF3426184B790096519B /* CardImageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		91B3EF3926184B8A0096519B /* Extention */ = {
+			isa = PBXGroup;
+			children = (
+				91B3EF3A26184BA10096519B /* UIImage-Extention.swift */,
+				91B3EF4226184BC00096519B /* UIView-Extention.swift */,
+				91B3EF4726184BF70096519B /* UIColor-Extention.swift */,
+				91B3EF4C26184C200096519B /* UIButton-Extention.swift */,
+			);
+			path = Extention;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +298,6 @@
 			files = (
 				91B3EEEC261838D60096519B /* LaunchScreen.storyboard in Resources */,
 				91B3EEE9261838D60096519B /* Assets.xcassets in Resources */,
-				91B3EEE7261838D50096519B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,9 +322,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91B3EEE4261838D50096519B /* ViewController.swift in Sources */,
+				91B3EF4D26184C200096519B /* UIButton-Extention.swift in Sources */,
+				91B3EF3026184B5D0096519B /* CardInfoLabel.swift in Sources */,
+				91B3EEE4261838D50096519B /* HomeViewController.swift in Sources */,
 				91B3EEE0261838D50096519B /* AppDelegate.swift in Sources */,
+				91B3EF4326184BC00096519B /* UIView-Extention.swift in Sources */,
+				9176C3112618671C0005EF58 /* CommonConst.swift in Sources */,
+				91B3EF4826184BF70096519B /* UIColor-Extention.swift in Sources */,
 				91B3EEE2261838D50096519B /* SceneDelegate.swift in Sources */,
+				91B3EF3B26184BA10096519B /* UIImage-Extention.swift in Sources */,
+				91B3EF2626184ABF0096519B /* TopControlView.swift in Sources */,
+				91B3EF2B26184B330096519B /* CardView.swift in Sources */,
+				91B3EF3526184B790096519B /* CardImageView.swift in Sources */,
+				9176F55A26195D8500F6FA23 /* Task.swift in Sources */,
+				91B3EF1E261849BF0096519B /* BottomControlView.swift in Sources */,
+				9176F5652619EA4600F6FA23 /* TaskListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,14 +372,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		91B3EEE5261838D50096519B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				91B3EEE6261838D50096519B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		91B3EEEA261838D60096519B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
