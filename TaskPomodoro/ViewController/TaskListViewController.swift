@@ -35,10 +35,17 @@ class TaskListViewController:UIViewController{
         tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
         self.view.addSubview(tableView)
         
+        let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped(_:)))
+        navigationItem.rightBarButtonItems = [addBarButtonItem]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+    }
+    @objc func addBarButtonTapped(_ sender :UIBarButtonItem){
+        //画面遷移
+        let registerTask = RegisterTaskViewController()
+        self.navigationController?.pushViewController(registerTask, animated: true)
     }
     
 }
