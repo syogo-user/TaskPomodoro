@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,8 @@
 		9176F56A261A717500F6FA23 /* RegisterTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F569261A717500F6FA23 /* RegisterTaskViewController.swift */; };
 		9176F56F261A75C000F6FA23 /* RegisterTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F56E261A75C000F6FA23 /* RegisterTextField.swift */; };
 		9176F579261A777A00F6FA23 /* RegisterTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F578261A777A00F6FA23 /* RegisterTextLabel.swift */; };
+		9176F589261A87DA00F6FA23 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F588261A87DA00F6FA23 /* TaskData.swift */; };
+		9176F58F261B3CC800F6FA23 /* CellTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F58E261B3CC800F6FA23 /* CellTextLabel.swift */; };
 		91B3EEE0261838D50096519B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEDF261838D50096519B /* AppDelegate.swift */; };
 		91B3EEE2261838D50096519B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE1261838D50096519B /* SceneDelegate.swift */; };
 		91B3EEE4261838D50096519B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE3261838D50096519B /* HomeViewController.swift */; };
@@ -65,6 +67,8 @@
 		9176F569261A717500F6FA23 /* RegisterTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTaskViewController.swift; sourceTree = "<group>"; };
 		9176F56E261A75C000F6FA23 /* RegisterTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTextField.swift; sourceTree = "<group>"; };
 		9176F578261A777A00F6FA23 /* RegisterTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTextLabel.swift; sourceTree = "<group>"; };
+		9176F588261A87DA00F6FA23 /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
+		9176F58E261B3CC800F6FA23 /* CellTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTextLabel.swift; sourceTree = "<group>"; };
 		91B3EEDC261838D50096519B /* TaskPomodoro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskPomodoro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B3EEDF261838D50096519B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91B3EEE1261838D50096519B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,7 +133,6 @@
 				7EE07F2392E207DCA8B059D9 /* Pods-TaskPomodoroTests.debug.xcconfig */,
 				D4446535F8D10C16FC43720E /* Pods-TaskPomodoroTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -137,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				9176F55926195D8500F6FA23 /* Task.swift */,
+				9176F588261A87DA00F6FA23 /* TaskData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -160,6 +164,14 @@
 				91B3EF3426184B790096519B /* CardImageView.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		9176F58D261B3CAA00F6FA23 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				9176F58E261B3CC800F6FA23 /* CellTextLabel.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		91B3EED3261838D50096519B = {
@@ -232,6 +244,7 @@
 		91B3EF1C2618499F0096519B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9176F58D261B3CAA00F6FA23 /* Cell */,
 				9176F574261A765B00F6FA23 /* Home */,
 				9176F573261A765000F6FA23 /* Register */,
 			);
@@ -511,9 +524,11 @@
 				91B3EF2626184ABF0096519B /* TopControlView.swift in Sources */,
 				91B3EF2B26184B330096519B /* CardView.swift in Sources */,
 				91B3EF3526184B790096519B /* CardImageView.swift in Sources */,
+				9176F58F261B3CC800F6FA23 /* CellTextLabel.swift in Sources */,
 				9176F55A26195D8500F6FA23 /* Task.swift in Sources */,
 				91B3EF1E261849BF0096519B /* BottomControlView.swift in Sources */,
 				9176F5652619EA4600F6FA23 /* TaskListViewController.swift in Sources */,
+				9176F589261A87DA00F6FA23 /* TaskData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

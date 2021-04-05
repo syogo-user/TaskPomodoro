@@ -6,10 +6,11 @@
 //
 
 import UIKit
-
+import RealmSwift
 class HomeViewController: UIViewController {
 
-    private var taskArray = [Task]()
+    var taskDataArray = try! Realm().objects(TaskData.self)
+//    private var taskArray = [Task]()
     let cardView = UIView()
     let bottomControlView = BottomControlView()
     
@@ -27,11 +28,12 @@ class HomeViewController: UIViewController {
     private func getTask(){
         //TODO タスク情報を取得
         //TODO あとで修正
-        self.taskArray.append(Task(title: "数学", content: "因数分解"))
-        self.taskArray.append(Task(title: "英語", content: "現在進行系"))
+//        self.taskArray.append(Task(title: "数学", content: "因数分解"))
+//        self.taskArray.append(Task(title: "英語", content: "現在進行系"))
+        
     }
     private func setCardInfo(){
-        self.taskArray.forEach { task in
+        self.taskDataArray.forEach { task in
             let card = CardView(task: task)
             self.cardView.addSubview(card)
             card.anchor(top:self.cardView.topAnchor,bottom: self.cardView.bottomAnchor,left: self.cardView.leftAnchor,right: self.cardView.rightAnchor)

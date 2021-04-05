@@ -26,7 +26,7 @@ class CardView:UIView{
 
     private let nopeLabel = CardInfoLabel(text: "NOPE", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
     
-    init(task:Task) {
+    init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
         setupGradientLayer()
@@ -95,7 +95,7 @@ class CardView:UIView{
         }
     }
 
-    private func setupLayout(task:Task){
+    private func setupLayout(task:TaskData){
         let infoVerticalStackView = UIStackView(arrangedSubviews: [residenceLabel,hobbyLabel,contentLabel])
         infoVerticalStackView.axis = .vertical//縦並び
         

@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import RealmSwift
 class RegisterTaskViewController:UIViewController{
-        
+    
+    let realm = try! Realm()
+    var task :TaskData!
+    
     private let titleLabel = RegisterTextLabel(text: "タイトル")
     private let contentLabel = RegisterTextLabel(text: "内容")
     private let titleTextField = RegisterTextField(placeHolder: "タイトル")
@@ -38,7 +42,12 @@ class RegisterTaskViewController:UIViewController{
         registerButton.anchor(bottom:view.bottomAnchor,left: view.leftAnchor,right: view.rightAnchor,height: 60,bottomPdding: 50,leftPdding: 80,rightPdding: 80)
     }
     @objc private func tapRegisterButton(){
-        
+        //登録処理
+        try! realm.write{
+            self.task.title = self.titleTextField.text ?? ""
+            self.task.content = self.contentTextField.text ?? ""
+            self.realm.add(self.task,update: .modified)
+        }
     }
     
 }
