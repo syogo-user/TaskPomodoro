@@ -6,8 +6,14 @@
 //
 
 import UIKit
+protocol TaskProcessDelegate {
+    func taskProcess(complete:Bool,id:Int)
+}
 class CardView:UIView{
+
+    var taskProcessDelegate:TaskProcessDelegate?
     
+    private var cardId = 0
     private let gradientLayer = CAGradientLayer()
     
     //MARK:UIViews
@@ -26,6 +32,8 @@ class CardView:UIView{
 
     private let nopeLabel = CardInfoLabel(text: "NOPE", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
     
+    
+
     init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
@@ -81,9 +89,11 @@ class CardView:UIView{
         if translation.x <= -120 {
             //消える動作
             view.removeCardViewAnimation(x: -600)
+            taskProcessDelegate?.taskProcess(complete:false,id:cardId)             //あとで （一番うしろに並び替える）
         }else if translation.x >= 120{
             //消える動作
             view.removeCardViewAnimation(x: 600)
+            taskProcessDelegate?.taskProcess(complete:true,id: cardId) //完了 (完了タスクに追加)
         }else {
             //カードのもとに戻る動き
             UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.7, options: []) {
@@ -122,6 +132,9 @@ class CardView:UIView{
         //タスク情報をViewに反映
         titleLabel.text = task.title
         contentLabel.text = task.content
+        
+        //idを保存
+        self.cardId =  task.id
         
     }
     

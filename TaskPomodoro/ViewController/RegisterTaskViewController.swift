@@ -48,6 +48,7 @@ class RegisterTaskViewController:UIViewController{
             self.task.content = self.contentTextField.text ?? ""
             self.realm.add(self.task,update: .modified)
         }
+        self.navigationController?.popViewController(animated: true)
     }
     
 }

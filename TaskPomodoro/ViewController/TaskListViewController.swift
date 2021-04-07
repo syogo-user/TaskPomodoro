@@ -99,6 +99,9 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
             sourceObject.orderNo = destinationObjectOrder
         }
     }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
 }
 
 

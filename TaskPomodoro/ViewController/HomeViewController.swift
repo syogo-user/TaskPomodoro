@@ -9,9 +9,11 @@ import UIKit
 import RealmSwift
 class HomeViewController: UIViewController {
 
+    let realm = try! Realm()
     var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
     let cardView = UIView()
     let bottomControlView = BottomControlView()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,13 +26,15 @@ class HomeViewController: UIViewController {
         setCardInfo()
         bottomControlView.reloadView.button?.addTarget(self, action: #selector(tapReload), for: .touchUpInside)
     }
-    //TODO カードがすでにviewに存在する場合、一度クリアする
+    //カードがすでにviewに存在する場合、一度クリアする
     private func removeCardInfo(){
         self.removeAllSubviews(parentView: cardView)
     }
     private func setCardInfo(){
-        self.taskDataArray.forEach { task in
+        self.taskDataArray.reversed().forEach { task in
             let card = CardView(task: task)
+            card.taskProcessDelegate = self//デリゲート
+            
             self.cardView.addSubview(card)
             card.anchor(top:self.cardView.topAnchor,bottom: self.cardView.bottomAnchor,left: self.cardView.leftAnchor,right: self.cardView.rightAnchor)
         }
@@ -56,10 +60,56 @@ class HomeViewController: UIViewController {
         
     }
     func removeAllSubviews(parentView: UIView){
-        var subviews = parentView.subviews
+        let subviews = parentView.subviews
         for subview in subviews {
             subview.removeFromSuperview()
         }
     }
 }
-
+extension HomeViewController:TaskProcessDelegate{
+    //カードが消えるときの動作
+    func taskProcess(complete: Bool,id:Int) {
+        if complete{
+            //完了の場合
+            
+        }else {
+            //後での場合
+            //一番うしろに並び替え
+            sortTask(id:id)
+        }
+    }
+    
+    
+    private func sortTask(id:Int){
+        
+        var arrayIndex = 0 //一番後ろに持っていくカードのindex用変数
+        let lastIndex = taskDataArray.count - 1
+        
+        //idから配列のindexを取得
+        for (index,task) in taskDataArray.enumerated(){
+            if task.id == id{
+                arrayIndex = index
+            }
+        }
+        //並び替え処理
+        try! realm.write {
+            let sourceObject = taskDataArray[arrayIndex]
+            let destinationObject = taskDataArray[lastIndex]
+            let destinationObjectOrder = destinationObject.orderNo
+            
+            // 間の項目の並び替え用のorderNoを-1シフト
+            for index in arrayIndex...lastIndex {
+                let object = taskDataArray[index]
+                object.orderNo -= 1
+            }                    
+            // 移動したセルの並びを移動先に更新
+            sourceObject.orderNo = destinationObjectOrder
+            
+            
+            //再描画
+            removeCardInfo()
+            setCardInfo()
+        }
+    }
+    
+}
