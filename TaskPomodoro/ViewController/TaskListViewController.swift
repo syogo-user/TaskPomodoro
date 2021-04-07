@@ -10,7 +10,7 @@ import RealmSwift
 class TaskListViewController:UIViewController{
     
     let realm = try! Realm()
-    var taskDataArray = try! Realm().objects(TaskData.self)
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
     
     private var tableView:UITableView!
     private let cellId = "cellId"
@@ -38,6 +38,7 @@ class TaskListViewController:UIViewController{
         tableView.estimatedRowHeight = 500
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.isEditing = true //編集可能
         self.view.addSubview(tableView)
         
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped(_:)))
@@ -52,11 +53,14 @@ class TaskListViewController:UIViewController{
         let task = TaskData()
         let allTasks = realm.objects(TaskData.self)
         if  allTasks.count != 0{
-            task.id = allTasks.max(ofProperty: "id")! + 1
+            let no = allTasks.max(ofProperty: "id")! + 1
+            task.id = no
+            task.orderNo = no //ソート用
         }
         
         //画面遷移
         let registerTask = RegisterTaskViewController()
+        
         registerTask.task = task
         self.navigationController?.pushViewController(registerTask, animated: true)
     }
@@ -72,8 +76,29 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.setData(task: taskDataArray[indexPath.row])
         return cell
     }
-    
-    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        //並び替え処理
+        try! realm.write {
+            let sourceObject = taskDataArray[sourceIndexPath.row]
+            let destinationObject = taskDataArray[destinationIndexPath.row]
+            let destinationObjectOrder = destinationObject.orderNo
+            if sourceIndexPath.row < destinationIndexPath.row {
+                // 上から下に移動した場合、間の項目を上にシフト
+                for index in sourceIndexPath.row...destinationIndexPath.row {
+                    let object = taskDataArray[index]
+                    object.orderNo -= 1
+                }
+            } else {
+                // 下から上に移動した場合、間の項目を下にシフト
+                for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed(){
+                    let object = taskDataArray[index]
+                    object.orderNo += 1
+                }
+            }
+            // 移動したセルの並びを移動先に更新
+            sourceObject.orderNo = destinationObjectOrder
+        }
+    }
 }
 
 

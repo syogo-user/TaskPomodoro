@@ -9,8 +9,7 @@ import UIKit
 import RealmSwift
 class HomeViewController: UIViewController {
 
-    var taskDataArray = try! Realm().objects(TaskData.self)
-//    private var taskArray = [Task]()
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
     let cardView = UIView()
     let bottomControlView = BottomControlView()
     
@@ -21,16 +20,13 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getTask()
+        removeCardInfo()
         setCardInfo()
         bottomControlView.reloadView.button?.addTarget(self, action: #selector(tapReload), for: .touchUpInside)
     }
-    private func getTask(){
-        //TODO タスク情報を取得
-        //TODO あとで修正
-//        self.taskArray.append(Task(title: "数学", content: "因数分解"))
-//        self.taskArray.append(Task(title: "英語", content: "現在進行系"))
-        
+    //TODO カードがすでにviewに存在する場合、一度クリアする
+    private func removeCardInfo(){
+        self.removeAllSubviews(parentView: cardView)
     }
     private func setCardInfo(){
         self.taskDataArray.forEach { task in
@@ -40,12 +36,8 @@ class HomeViewController: UIViewController {
         }
     }
     @objc func tapReload(){
-        print("tapReload")
-        //TODO
         let taskListController = TaskListViewController()
-        let nav = UINavigationController(rootViewController: taskListController)
-        nav.modalPresentationStyle = .fullScreen
-        self.present(nav, animated: true, completion: nil)
+        self.navigationController?.pushViewController(taskListController, animated: true)
     }
     private func setupLayout(){
         view.backgroundColor = .white
@@ -63,6 +55,11 @@ class HomeViewController: UIViewController {
             stackView.rightAnchor.constraint(equalTo: view.rightAnchor)].forEach {$0.isActive = true}
         
     }
-
+    func removeAllSubviews(parentView: UIView){
+        var subviews = parentView.subviews
+        for subview in subviews {
+            subview.removeFromSuperview()
+        }
+    }
 }
 
