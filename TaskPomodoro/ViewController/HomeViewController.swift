@@ -71,18 +71,18 @@ extension HomeViewController:TaskProcessDelegate{
     func taskProcess(complete: Bool,id:Int) {
         if complete{
             //完了の場合
-            
+            completeProcess(id:id)
         }else {
-            //後での場合
+            //あとでの場合
             //一番うしろに並び替え
             sortTask(id:id)
         }
     }
     
-    
+    //「あとで」の処理
     private func sortTask(id:Int){
         
-        var arrayIndex = 0 //一番後ろに持っていくカードのindex用変数
+        var arrayIndex = 0 //選択したカードの配列のインデックスを設定する変数
         let lastIndex = taskDataArray.count - 1
         
         //idから配列のindexを取得
@@ -101,7 +101,7 @@ extension HomeViewController:TaskProcessDelegate{
             for index in arrayIndex...lastIndex {
                 let object = taskDataArray[index]
                 object.orderNo -= 1
-            }                    
+            }
             // 移動したセルの並びを移動先に更新
             sourceObject.orderNo = destinationObjectOrder
             
@@ -112,4 +112,19 @@ extension HomeViewController:TaskProcessDelegate{
         }
     }
     
+    //「完了」の処理
+    private func completeProcess(id:Int){
+        var arrayIndex = 0 //選択したカードの配列のインデックスを設定する変数
+        //idから配列のindexを取得
+        for (index,task) in taskDataArray.enumerated(){
+            if task.id == id{
+                arrayIndex = index
+            }
+        }
+        //一旦削除処理として作る
+//        TODO あとで別の配列に入れる処理に変更する
+        try! realm.write{
+            self.realm.delete(self.taskDataArray[arrayIndex])
+        }
+    }
 }

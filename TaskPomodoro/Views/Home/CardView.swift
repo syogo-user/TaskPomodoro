@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 protocol TaskProcessDelegate {
     func taskProcess(complete:Bool,id:Int)
 }
@@ -13,7 +14,9 @@ class CardView:UIView{
 
     var taskProcessDelegate:TaskProcessDelegate?
     
-    private var cardId = 0
+    let realm = try! Realm()
+    
+    private var task :TaskData?
     private let gradientLayer = CAGradientLayer()
     
     //MARK:UIViews
@@ -28,18 +31,26 @@ class CardView:UIView{
     
     private let contentLabel  = CardInfoLabel(labelText: "走り回るのが大好きです。", labelFont: .systemFont(ofSize: 25, weight: .regular))
 
-    private let goodLabel = CardInfoLabel(text: "GOOD", textColor: UIColor.rgb(red:137,green: 223,blue: 86))
+    private let goodLabel = CardInfoLabel(text: "完了", textColor: UIColor.rgb(red:137,green: 223,blue: 86))
 
-    private let nopeLabel = CardInfoLabel(text: "NOPE", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
+    private let nopeLabel = CardInfoLabel(text: "あとで", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
     
+    private let startStopButton = UIButton(type:.system).createStartStopButton(title: "再生")
     
-
+    private let timerLabel = CardInfoLabel(labelText: "00:00", labelFont: .systemFont(ofSize: 40, weight: .heavy))
+    
+    var timer :Timer!
+    //時間
+    var timer_sec: Float = 0
+            
     init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
         setupGradientLayer()
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panCargView))
         self.addGestureRecognizer(panGesture)//自分自身にpanGestureを設定する
+        
+        startStopButton.addTarget(self, action: #selector(tapStartStop), for: .touchUpInside)
         
     }
     private func setupGradientLayer(){
@@ -55,6 +66,50 @@ class CardView:UIView{
         //viewが生成されて大きさがわかった段階でここが呼ばれる
         gradientLayer.frame = self.bounds
     }
+    @objc private func tapStartStop(){
+        guard let task = self.task else{return}
+
+        
+        //スタートかストップかを分岐する
+        if self.timer == nil{
+            //realmからタスクを取得
+            let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
+            //タイマーを作成する
+            //realmから取得した時間をプロパティに設定
+            self.timer_sec = taskData.first?.time ?? 0
+            
+            self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer(_:)),userInfo:nil,repeats: true)
+            self.startStopButton.setTitle("一時停止", for: .normal)
+        }else{
+            //タイマーを一時停止
+            stopTimer()
+        }
+    }
+    @objc private func updateTimer(_ timer:Timer){
+        self.timer_sec += 1
+        //残り秒数(25分 - 経過秒数)
+        let timeLeft = 1500 - timer_sec
+        let hour = timeLeft / 60
+        let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
+        self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
+    }
+    private func stopTimer(){
+        guard let task = self.task else{return}
+        if self.timer != nil{
+            //realmからタスクを取得
+            let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
+            
+            //タイマーを一時停止する
+            self.timer.invalidate()
+            self.timer = nil
+            self.startStopButton.setTitle("再生", for: .normal)
+            //経過時間をrealmに保存
+            try! realm.write{
+                taskData.first?.time = self.timer_sec
+            }
+        }
+    }
+    
     @objc private func panCargView(gesture:UIPanGestureRecognizer){
         let translation = gesture.translation(in: self)
         guard let view = gesture.view else { return}
@@ -85,15 +140,21 @@ class CardView:UIView{
         
     }
     private func handlePnaEnded(view:UIView,translation:CGPoint){
-        print("translation.x:",translation.x)
+        guard let task = self.task else{return}
+        
         if translation.x <= -120 {
             //消える動作
             view.removeCardViewAnimation(x: -600)
-            taskProcessDelegate?.taskProcess(complete:false,id:cardId)             //あとで （一番うしろに並び替える）
+            //タイマー一時停止
+            stopTimer()
+            
+            taskProcessDelegate?.taskProcess(complete:false,id:task.id ) //あとで （一番うしろに並び替える）
         }else if translation.x >= 120{
             //消える動作
             view.removeCardViewAnimation(x: 600)
-            taskProcessDelegate?.taskProcess(complete:true,id: cardId) //完了 (完了タスクに追加)
+            //タイマー一時停止
+            stopTimer()
+            taskProcessDelegate?.taskProcess(complete:true,id: task.id) //完了 (完了タスクに追加)
         }else {
             //カードのもとに戻る動き
             UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.7, options: []) {
@@ -117,12 +178,16 @@ class CardView:UIView{
         //Viewの配置を作成
         addSubview(cardImageView)
         addSubview(titleLabel)
+        addSubview(startStopButton)
+        addSubview(timerLabel)
         addSubview(baseStackView)
         addSubview(goodLabel)
         addSubview(nopeLabel)
-        
+
         cardImageView.anchor(top:topAnchor,bottom:bottomAnchor,left: leftAnchor,right: rightAnchor,leftPdding: 10,rightPdding: 10)
         infoButton.anchor(width:40)
+        startStopButton.anchor(centerY: self.centerYAnchor, centerX:self.centerXAnchor,width: 200,height: 100)
+        timerLabel.anchor(bottom:startStopButton.topAnchor,centerX:self.centerXAnchor, width: 200, height: 50, bottomPdding: 10)
         baseStackView.anchor(bottom:cardImageView.bottomAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,bottomPdding: 20,leftPdding: 20,rightPdding: 20)
         titleLabel.anchor(bottom:baseStackView.topAnchor,left:cardImageView.leftAnchor,bottomPdding: 10,leftPdding: 20)
         
@@ -133,8 +198,13 @@ class CardView:UIView{
         titleLabel.text = task.title
         contentLabel.text = task.content
         
-        //idを保存
-        self.cardId =  task.id
+        //残り秒数(25分 - 経過秒数)
+        let timeLeft = 1500 - task.time
+        let hour = timeLeft / 60
+        let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
+        self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
+        //プロパティに設定
+        self.task = task
         
     }
     

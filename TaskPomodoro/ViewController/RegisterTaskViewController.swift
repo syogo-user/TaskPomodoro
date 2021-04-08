@@ -23,8 +23,12 @@ class RegisterTaskViewController:UIViewController{
         view.backgroundColor = .white
         setLayout()
         registerButton.addTarget(self, action: #selector(tapRegisterButton), for: .touchUpInside)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tapView))
+        view.addGestureRecognizer(gesture)
     }
-    
+    @objc private func tapView(){
+        view.endEditing(true)
+    }
     private func setLayout(){
         
         titleLabel.anchor(height:50)
@@ -46,6 +50,7 @@ class RegisterTaskViewController:UIViewController{
         try! realm.write{
             self.task.title = self.titleTextField.text ?? ""
             self.task.content = self.contentTextField.text ?? ""
+            self.task.time = 0
             self.realm.add(self.task,update: .modified)
         }
         self.navigationController?.popViewController(animated: true)

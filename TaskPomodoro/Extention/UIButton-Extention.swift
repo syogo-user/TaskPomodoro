@@ -17,4 +17,9 @@ extension UIButton{
         self.titleLabel?.font = .systemFont(ofSize: 25)
         return self
     }
+    func createStartStopButton(title:String) -> UIButton{
+        self.setTitle(title, for: .normal)
+        self.titleLabel?.font = .systemFont(ofSize: 30)
+        return self
+    }
 }
