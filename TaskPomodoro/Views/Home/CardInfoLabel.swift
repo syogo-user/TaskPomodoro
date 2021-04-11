@@ -25,6 +25,7 @@ class CardInfoLabel:UILabel{
         super.init(frame: .zero)
         font = labelFont
         textColor = .white
+        textAlignment = .center
         text = labelText
     }
     required init?(coder: NSCoder) {

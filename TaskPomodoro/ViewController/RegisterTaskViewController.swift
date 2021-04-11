@@ -25,6 +25,7 @@ class RegisterTaskViewController:UIViewController{
         registerButton.addTarget(self, action: #selector(tapRegisterButton), for: .touchUpInside)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapView))
         view.addGestureRecognizer(gesture)
+        self.navigationController?.navigationBar.isHidden = false
     }
     @objc private func tapView(){
         view.endEditing(true)
@@ -44,6 +45,9 @@ class RegisterTaskViewController:UIViewController{
         
         stackView.anchor(top:view.topAnchor,left: view.leftAnchor,right: view.rightAnchor,topPdding: 160,leftPdding: 20,rightPdding: 20)
         registerButton.anchor(bottom:view.bottomAnchor,left: view.leftAnchor,right: view.rightAnchor,height: 60,bottomPdding: 50,leftPdding: 80,rightPdding: 80)
+        
+        titleTextField.text = task.title
+        contentTextField.text = task.content
     }
     @objc private func tapRegisterButton(){
         //登録処理

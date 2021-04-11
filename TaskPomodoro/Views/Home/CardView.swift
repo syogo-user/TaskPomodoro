@@ -7,29 +7,27 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 protocol TaskProcessDelegate {
     func taskProcess(complete:Bool,id:Int)
 }
 class CardView:UIView{
 
     var taskProcessDelegate:TaskProcessDelegate?
+    var audioPlayer: AVAudioPlayer!
     
     let realm = try! Realm()
     
     private var task :TaskData?
     private let gradientLayer = CAGradientLayer()
+    private let timeA :Float = 1500.0 //1500秒 = 25分
     
     //MARK:UIViews
     private let cardImageView = CardImageView(frame:
                                                 .zero)
-    private let infoButton = UIButton(type:.system).createCardInfoButton()
+    private let titleLabel = CardInfoLabel(labelText: "タイトル", labelFont: .systemFont(ofSize: 40, weight: .heavy))
     
-    private let titleLabel = CardInfoLabel(labelText: "Taro  22", labelFont: .systemFont(ofSize: 40, weight: .heavy))
-    private let residenceLabel = CardInfoLabel(labelText: "日本、大阪", labelFont: .systemFont(ofSize: 20, weight: .regular))
-    
-    private let hobbyLabel = CardInfoLabel(labelText: "ランニング",labelFont: .systemFont(ofSize: 25, weight: .regular))
-    
-    private let contentLabel  = CardInfoLabel(labelText: "走り回るのが大好きです。", labelFont: .systemFont(ofSize: 25, weight: .regular))
+    private let contentLabel  = CardInfoLabel(labelText: "内容", labelFont: .systemFont(ofSize: 25, weight: .regular))
 
     private let goodLabel = CardInfoLabel(text: "完了", textColor: UIColor.rgb(red:137,green: 223,blue: 86))
 
@@ -68,7 +66,6 @@ class CardView:UIView{
     }
     @objc private func tapStartStop(){
         guard let task = self.task else{return}
-
         
         //スタートかストップかを分岐する
         if self.timer == nil{
@@ -77,6 +74,10 @@ class CardView:UIView{
             //タイマーを作成する
             //realmから取得した時間をプロパティに設定
             self.timer_sec = taskData.first?.time ?? 0
+            
+            if self.timer_sec >= timeA{
+                return
+            }
             
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer(_:)),userInfo:nil,repeats: true)
             self.startStopButton.setTitle("一時停止", for: .normal)
@@ -88,12 +89,27 @@ class CardView:UIView{
     @objc private func updateTimer(_ timer:Timer){
         self.timer_sec += 1
         //残り秒数(25分 - 経過秒数)
-        let timeLeft = 1500 - timer_sec
+        let timeLeft = timeA - timer_sec
         let hour = timeLeft / 60
         let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
         self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
+        
+        if hour == 0 && minutes == 0{
+            //音を鳴らす
+            playSound(name:"complete")
+            //タイマーを止める
+            stopTimer()
+            guard let task = self.task else{return}
+            //realmからタスクを取得
+            let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
+            //経過時間をrealmに保存
+            try! realm.write{
+                taskData.first?.time = self.timer_sec
+            }
+        }
+
     }
-    private func stopTimer(){
+    func stopTimer(){
         guard let task = self.task else{return}
         if self.timer != nil{
             //realmからタスクを取得
@@ -147,7 +163,6 @@ class CardView:UIView{
             view.removeCardViewAnimation(x: -600)
             //タイマー一時停止
             stopTimer()
-            
             taskProcessDelegate?.taskProcess(complete:false,id:task.id ) //あとで （一番うしろに並び替える）
         }else if translation.x >= 120{
             //消える動作
@@ -167,17 +182,16 @@ class CardView:UIView{
     }
 
     private func setupLayout(task:TaskData){
-        let infoVerticalStackView = UIStackView(arrangedSubviews: [residenceLabel,hobbyLabel,contentLabel])
+        let infoVerticalStackView = UIStackView(arrangedSubviews: [titleLabel,contentLabel])
         infoVerticalStackView.axis = .vertical//縦並び
         
             
-        let baseStackView = UIStackView(arrangedSubviews: [infoVerticalStackView ,infoButton])
+        let baseStackView = UIStackView(arrangedSubviews: [infoVerticalStackView])
         baseStackView.axis = .horizontal//横並び
-        
         
         //Viewの配置を作成
         addSubview(cardImageView)
-        addSubview(titleLabel)
+//        addSubview(titleLabel)
         addSubview(startStopButton)
         addSubview(timerLabel)
         addSubview(baseStackView)
@@ -185,11 +199,11 @@ class CardView:UIView{
         addSubview(nopeLabel)
 
         cardImageView.anchor(top:topAnchor,bottom:bottomAnchor,left: leftAnchor,right: rightAnchor,leftPdding: 10,rightPdding: 10)
-        infoButton.anchor(width:40)
-        startStopButton.anchor(centerY: self.centerYAnchor, centerX:self.centerXAnchor,width: 200,height: 100)
-        timerLabel.anchor(bottom:startStopButton.topAnchor,centerX:self.centerXAnchor, width: 200, height: 50, bottomPdding: 10)
-        baseStackView.anchor(bottom:cardImageView.bottomAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,bottomPdding: 20,leftPdding: 20,rightPdding: 20)
-        titleLabel.anchor(bottom:baseStackView.topAnchor,left:cardImageView.leftAnchor,bottomPdding: 10,leftPdding: 20)
+        startStopButton.anchor(bottom:bottomAnchor, centerX:self.centerXAnchor,width: 200,height: 100,bottomPdding: 120)
+        timerLabel.anchor(bottom:startStopButton.topAnchor, centerX:self.centerXAnchor,width: 200,height: 50,bottomPdding: 10)
+//        titleLabel.anchor(height:100)
+//        contentLabel.anchor(height:150)
+        baseStackView.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,topPdding: 80,leftPdding: 20,rightPdding: 20)
         
         goodLabel.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,width: 140,height: 55,topPdding: 25 ,leftPdding: 20)
         nopeLabel.anchor(top:cardImageView.topAnchor,right:cardImageView.rightAnchor,width:140,height: 55,topPdding: 25,rightPdding: 20)
@@ -212,5 +226,21 @@ class CardView:UIView{
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+
+extension CardView :AVAudioPlayerDelegate{
+    func playSound(name:String){
+        guard let path = Bundle.main.path(forResource: name, ofType: "mp3") else{
+            return
+        }
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+            audioPlayer.delegate = self
+            audioPlayer.play()
+        }catch {
+            
+        }
+    }
 }
 

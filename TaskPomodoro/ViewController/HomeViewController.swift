@@ -25,6 +25,8 @@ class HomeViewController: UIViewController {
         removeCardInfo()
         setCardInfo()
         bottomControlView.reloadView.button?.addTarget(self, action: #selector(tapReload), for: .touchUpInside)
+        bottomControlView.heartView.button?.addTarget(self, action: #selector(tapHeart), for: .touchUpInside)
+        self.navigationController?.navigationBar.isHidden = true
     }
     //カードがすでにviewに存在する場合、一度クリアする
     private func removeCardInfo(){
@@ -35,12 +37,31 @@ class HomeViewController: UIViewController {
             let card = CardView(task: task)
             card.taskProcessDelegate = self//デリゲート
             
+            //cardにタグ(taskのid)をつける
+            card.tag = task.id
             self.cardView.addSubview(card)
             card.anchor(top:self.cardView.topAnchor,bottom: self.cardView.bottomAnchor,left: self.cardView.leftAnchor,right: self.cardView.rightAnchor)
         }
     }
     @objc func tapReload(){
+        //タイマーが起動している場合は止める
+        let subviews = self.cardView.subviews
+        for subview in subviews {
+            if subview is CardView{
+                let cardView = subview as! CardView
+                cardView.stopTimer()
+            }
+        }
+            
+        //画面遷移
         let taskListController = TaskListViewController()
+        self.navigationController?.pushViewController(taskListController, animated: true)
+    }
+    @objc func tapHeart(){
+        //タスクを追加
+        //画面遷移
+        let taskListController = TaskListViewController()
+        taskListController.transition = true
         self.navigationController?.pushViewController(taskListController, animated: true)
     }
     private func setupLayout(){
@@ -121,10 +142,14 @@ extension HomeViewController:TaskProcessDelegate{
                 arrayIndex = index
             }
         }
+        //タイマーを止める
+        let cardView = self.cardView.viewWithTag(id) as! CardView
+        cardView.stopTimer()
         //一旦削除処理として作る
 //        TODO あとで別の配列に入れる処理に変更する
         try! realm.write{
             self.realm.delete(self.taskDataArray[arrayIndex])
         }
+
     }
 }

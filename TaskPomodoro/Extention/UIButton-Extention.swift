@@ -20,6 +20,7 @@ extension UIButton{
     func createStartStopButton(title:String) -> UIButton{
         self.setTitle(title, for: .normal)
         self.titleLabel?.font = .systemFont(ofSize: 30)
+        self.setTitleColor(.white, for: .normal)
         return self
     }
 }

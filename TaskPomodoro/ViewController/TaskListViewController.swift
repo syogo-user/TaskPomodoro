@@ -11,7 +11,7 @@ class TaskListViewController:UIViewController{
     
     let realm = try! Realm()
     var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
-    
+    var transition :Bool = false
     private var tableView:UITableView!
     private let cellId = "cellId"
 //    lazy var infoCollectionView :UICollectionView = {
@@ -38,17 +38,27 @@ class TaskListViewController:UIViewController{
         tableView.estimatedRowHeight = 500
         tableView.rowHeight = UITableView.automaticDimension
         tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
-        tableView.isEditing = true //編集可能
+        tableView.isEditing = true //セル並び替え可能
+        tableView.allowsSelectionDuringEditing = true //セル選択可能
+
+        
         self.view.addSubview(tableView)
         
-        let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped(_:)))
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        self.navigationController?.navigationBar.isHidden = false
+        
+        //遷移するか判定
+        transitionJudge()
     }
-    @objc func addBarButtonTapped(_ sender :UIBarButtonItem){
+    @objc func addBarButtonTapped(){
         //タスクのIdを設定
         let task = TaskData()
         let allTasks = realm.objects(TaskData.self)
@@ -64,7 +74,12 @@ class TaskListViewController:UIViewController{
         registerTask.task = task
         self.navigationController?.pushViewController(registerTask, animated: true)
     }
-    
+    private func transitionJudge(){
+        if self.transition{
+            self.transition = false
+            addBarButtonTapped()
+        }
+    }
 }
 extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -75,6 +90,13 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomTablViewCell
         cell.setData(task: taskDataArray[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //画面遷移
+        let registerTask = RegisterTaskViewController()
+        registerTask.task = taskDataArray[indexPath.row]
+        self.navigationController?.pushViewController(registerTask, animated: true)
     }
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         //並び替え処理
