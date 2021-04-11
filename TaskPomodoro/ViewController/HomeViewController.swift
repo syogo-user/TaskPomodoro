@@ -10,7 +10,9 @@ import RealmSwift
 class HomeViewController: UIViewController {
 
     let realm = try! Realm()
-    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
+    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
+    
     let cardView = UIView()
     let bottomControlView = BottomControlView()
     
@@ -26,6 +28,7 @@ class HomeViewController: UIViewController {
         setCardInfo()
         bottomControlView.reloadView.button?.addTarget(self, action: #selector(tapReload), for: .touchUpInside)
         bottomControlView.heartView.button?.addTarget(self, action: #selector(tapHeart), for: .touchUpInside)
+        bottomControlView.starView.button?.addTarget(self, action: #selector(tapStar), for: .touchUpInside)
         self.navigationController?.navigationBar.isHidden = true
     }
     //カードがすでにviewに存在する場合、一度クリアする
@@ -62,7 +65,14 @@ class HomeViewController: UIViewController {
         //画面遷移
         let taskListController = TaskListViewController()
         taskListController.transition = true
-        self.navigationController?.pushViewController(taskListController, animated: true)
+        self.navigationController?.pushViewController(taskListController, animated: false)
+    }
+    @objc func tapStar(){
+        //削除
+        
+        
+        
+        
     }
     private func setupLayout(){
         view.backgroundColor = .white
@@ -143,12 +153,12 @@ extension HomeViewController:TaskProcessDelegate{
             }
         }
         //タイマーを止める
-        let cardView = self.cardView.viewWithTag(id) as! CardView
-        cardView.stopTimer()
-        //一旦削除処理として作る
-//        TODO あとで別の配列に入れる処理に変更する
+        let cardView = self.cardView.viewWithTag(id) as? CardView
+        cardView?.stopTimer()
+//
+        //completeFlgに1を立てる//完了のフラグ
         try! realm.write{
-            self.realm.delete(self.taskDataArray[arrayIndex])
+            taskDataArray[arrayIndex].completeFlg = 1
         }
 
     }

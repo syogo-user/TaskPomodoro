@@ -10,10 +10,13 @@ import RealmSwift
 class TaskListViewController:UIViewController{
     
     let realm = try! Realm()
-    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true) 
+    let sectionTitleArray = ["タスク","完了"]
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
+    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
     var transition :Bool = false
     private var tableView:UITableView!
     private let cellId = "cellId"
+
 //    lazy var infoCollectionView :UICollectionView = {
 //        let layout = UICollectionViewFlowLayout()
 //        //中のviewをもとに大きさを自動で UITableViewDelegate, UITableViewDataSource 設定
@@ -26,7 +29,7 @@ class TaskListViewController:UIViewController{
 //        cv.register(InfoCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
 //        return cv
 //    }()
-  
+   
 
     
     override func viewDidLoad() {
@@ -82,44 +85,103 @@ class TaskListViewController:UIViewController{
     }
 }
 extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionTitleArray.count
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitleArray[section]
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskDataArray.count
+        if section == 0{
+            return taskDataArray.count
+        } else {
+            return taskCompleteArray.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomTablViewCell
-        cell.setData(task: taskDataArray[indexPath.row])
+        if indexPath.section == 0{
+            cell.setData(task: taskDataArray[indexPath.row])
+        }else{
+            cell.setData(task: taskCompleteArray[indexPath.row])
+        }
+
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //画面遷移
-        let registerTask = RegisterTaskViewController()
-        registerTask.task = taskDataArray[indexPath.row]
-        self.navigationController?.pushViewController(registerTask, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {        
+        if indexPath.section == 0{
+            //タスク
+            //画面遷移
+            let registerTask = RegisterTaskViewController()
+            registerTask.task = taskDataArray[indexPath.row]
+            self.navigationController?.pushViewController(registerTask, animated: true)
+        }else{
+            //完了
+            //画面遷移
+            let registerTask = RegisterTaskViewController()
+            registerTask.task = taskCompleteArray[indexPath.row]
+            self.navigationController?.pushViewController(registerTask, animated: true)
+        }
+        
     }
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        //並び替え処理
-        try! realm.write {
-            let sourceObject = taskDataArray[sourceIndexPath.row]
-            let destinationObject = taskDataArray[destinationIndexPath.row]
-            let destinationObjectOrder = destinationObject.orderNo
-            if sourceIndexPath.row < destinationIndexPath.row {
-                // 上から下に移動した場合、間の項目を上にシフト
-                for index in sourceIndexPath.row...destinationIndexPath.row {
-                    let object = taskDataArray[index]
-                    object.orderNo -= 1
+        if sourceIndexPath.section == 0{
+            //並び替え処理
+            try! realm.write {
+                let sourceObject = taskDataArray[sourceIndexPath.row]
+                let destinationObject = taskDataArray[destinationIndexPath.row]
+                let destinationObjectOrder = destinationObject.orderNo
+                if sourceIndexPath.row < destinationIndexPath.row {
+                    // 上から下に移動した場合、間の項目を上にシフト
+                    for index in sourceIndexPath.row...destinationIndexPath.row {
+                        let object = taskDataArray[index]
+                        object.orderNo -= 1
+                    }
+                } else {
+                    // 下から上に移動した場合、間の項目を下にシフト
+                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed(){
+                        let object = taskDataArray[index]
+                        object.orderNo += 1
+                    }
                 }
-            } else {
-                // 下から上に移動した場合、間の項目を下にシフト
-                for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed(){
-                    let object = taskDataArray[index]
-                    object.orderNo += 1
-                }
+                // 移動したセルの並びを移動先に更新
+                sourceObject.orderNo = destinationObjectOrder
             }
-            // 移動したセルの並びを移動先に更新
-            sourceObject.orderNo = destinationObjectOrder
+        }else{
+            //並び替え処理
+            try! realm.write {
+                let sourceObject = taskCompleteArray[sourceIndexPath.row]
+                let destinationObject = taskCompleteArray[destinationIndexPath.row]
+                let destinationObjectOrder = destinationObject.orderNo
+                if sourceIndexPath.row < destinationIndexPath.row {
+                    // 上から下に移動した場合、間の項目を上にシフト
+                    for index in sourceIndexPath.row...destinationIndexPath.row {
+                        let object = taskCompleteArray[index]
+                        object.orderNo -= 1
+                    }
+                } else {
+                    // 下から上に移動した場合、間の項目を下にシフト
+                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed(){
+                        let object = taskCompleteArray[index]
+                        object.orderNo += 1
+                    }
+                }
+                // 移動したセルの並びを移動先に更新
+                sourceObject.orderNo = destinationObjectOrder
+            }
         }
+
+    }
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        //セクションをまたぐ並び替えを禁止
+        if sourceIndexPath.section == proposedDestinationIndexPath.section {
+            return proposedDestinationIndexPath
+        }
+        return sourceIndexPath
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none

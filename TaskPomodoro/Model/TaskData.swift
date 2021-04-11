@@ -12,6 +12,7 @@ class TaskData :Object{
     @objc dynamic var content = ""
     @objc dynamic var orderNo = 0
     @objc dynamic var time:Float = 0
+    @objc dynamic var completeFlg = 0
     // id をプライマリーキーとして設定
     override static func primaryKey() -> String? {
         return "id"
