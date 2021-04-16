@@ -1,4 +1,5 @@
 PODS:
+  - ContextMenuSwift (0.0.8)
   - Realm (5.1.0):
     - Realm/Headers (= 5.1.0)
   - Realm/Headers (5.1.0)
@@ -6,17 +7,20 @@ PODS:
     - Realm (= 5.1.0)
 
 DEPENDENCIES:
+  - ContextMenuSwift
   - RealmSwift (= 5.1.0)
 
 SPEC REPOS:
   trunk:
+    - ContextMenuSwift
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
+  ContextMenuSwift: b4d4066b9ebe47a43f7734a4a6989cf03efe5ad8
   Realm: bdea546851e37b4cf0a2400cef115c7c26fda488
   RealmSwift: 70945aa168db93b215c460e9c8ef680261aa28af
 
-PODFILE CHECKSUM: 3b0d96a712e6fa19865fde004dd24d4ca44aa2b7
+PODFILE CHECKSUM: cc025875f56da065c17dfffee7183484a966c5e8
 
 COCOAPODS: 1.9.3

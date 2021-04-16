@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import ContextMenuSwift
 class TaskListViewController:UIViewController{
     
     let realm = try! Realm()
@@ -14,9 +15,18 @@ class TaskListViewController:UIViewController{
     var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
     var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
     var transition :Bool = false
-    private var tableView:UITableView!
+//    private var tableView:UITableView!
     private let cellId = "cellId"
 
+    lazy var tableView :UITableView = {
+        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.estimatedRowHeight = 500
+        tableView.rowHeight = UITableView.automaticDimension
+
+        return tableView
+    }()
 //    lazy var infoCollectionView :UICollectionView = {
 //        let layout = UICollectionViewFlowLayout()
 //        //中のviewをもとに大きさを自動で UITableViewDelegate, UITableViewDataSource 設定
@@ -34,21 +44,26 @@ class TaskListViewController:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.estimatedRowHeight = 500
-        tableView.rowHeight = UITableView.automaticDimension
+//
+//        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
+//        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.estimatedRowHeight = 500
+//        tableView.rowHeight = UITableView.automaticDimension
         tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
         tableView.isEditing = true //セル並び替え可能
         tableView.allowsSelectionDuringEditing = true //セル選択可能
+        
+        //長押し
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
+//        longPressRecognizer.numberOfTapsRequired = 1 //タップの数
+        tableView.addGestureRecognizer(longPressRecognizer)
 
         
         self.view.addSubview(tableView)
         
-        tableView.delegate = self
-        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.dataSource = self
         
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
@@ -77,6 +92,27 @@ class TaskListViewController:UIViewController{
         registerTask.task = task
         self.navigationController?.pushViewController(registerTask, animated: true)
     }
+    @objc func longPress(_ recognizer:UILongPressGestureRecognizer){
+        //長押し
+        // 押された位置でcellのPathを取得
+        let point = recognizer.location(in: tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+
+        print("長押し")
+        if indexPath == nil{
+            return
+        }else if recognizer.state == UIGestureRecognizer.State.began{
+            //長押し時の呼び出しメソッドは長押し開始と終了の2回呼び出されるのでbeganの場合のみ実行
+            let delete = ContextMenuItemWithImage(title: "削除", image: UIImage(systemName: "trash")!)
+            //コンテキストメニューに表示するアイテムを決定します
+            CM.items = [delete]
+            //表示します
+            CM.showMenu(viewTargeted: tableView.cellForRow(at: indexPath!)!,
+                        delegate: self,
+                        animated: true)
+        }
+        
+    }
     private func transitionJudge(){
         if self.transition{
             self.transition = false
@@ -91,7 +127,6 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitleArray[section]
     }
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0{
@@ -186,11 +221,69 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
+
+}
+extension TaskListViewController : ContextMenuDelegate{
+
+    
+    func contextMenuDidSelect(_ contextMenu: ContextMenu,
+                              cell: ContextMenuCell,
+                              targetedView: UIView,
+                              didSelect item: ContextMenuItem,
+                              forRowAt index: Int) -> Bool {
+        
+        //削除処理
+        //長押しされたセルを、型を再指定して読み込む
+        let pressedTableCell = targetedView as! CustomTablViewCell
+        
+        //セル内の情報を取得したい場合
+        let id = pressedTableCell.id
+        
+        var arrayIndex = 0
+        var taskDataArrayFlg :Bool = true
+        //idから配列のインデックスを取得
+        for (index,task) in taskDataArray.enumerated(){
+            if task.id == id{
+                arrayIndex = index
+                taskDataArrayFlg = true
+            }
+        }
+        
+        for (index,task) in taskCompleteArray.enumerated(){
+            if task.id == id{
+                arrayIndex = index
+                taskDataArrayFlg = false
+            }
+        }
+        
+        try! realm.write {
+            if taskDataArrayFlg {
+                self.realm.delete(taskDataArray[arrayIndex])
+            }else{
+                self.realm.delete(taskCompleteArray[arrayIndex])
+            }
+        }
+        self.tableView.reloadData()
+        return true
+        
+    }
+    func contextMenuDidAppear(_ contextMenu: ContextMenu) {
+        print("コンテキストメニューが表示されました")
+    }
+    func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
+        print("コンテキストメニューが消えました")
+    }
+    
+    func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
+        print("")
+    }
 }
 
 
+
+
 class CustomTablViewCell:UITableViewCell{
-    
+    var id = 0
     let title = CellTextLabel(text: "タイトル")
     let content = CellTextLabel(text: "コンテンツ")
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -208,6 +301,7 @@ class CustomTablViewCell:UITableViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     func setData(task:TaskData){
+        self.id = task.id
         self.title.text = task.title
         self.content.text = task.content        
     }

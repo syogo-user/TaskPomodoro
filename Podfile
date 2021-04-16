@@ -7,6 +7,7 @@ target 'TaskPomodoro' do
 
   # Pods for TaskPomodoro
   pod 'RealmSwift','5.1.0'
+  pod 'ContextMenuSwift'
 
   target 'TaskPomodoroTests' do
     inherit! :search_paths
