@@ -10,6 +10,7 @@
 //class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //
 //    var window: UIWindow?
+//    var statusHeight :CGFloat = 0.0
 //
 //
 //    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {

@@ -21,6 +21,7 @@ class CardView:UIView{
     private var task :TaskData?
     private let gradientLayer = CAGradientLayer()
     private let timeA :Float = 1500.0 //1500秒 = 25分
+    private let timeB :Float = 300.0 //300秒 = 5分
     
     //MARK:UIViews
     private let cardImageView = CardImageView(frame:
@@ -33,7 +34,7 @@ class CardView:UIView{
 
     private let nopeLabel = CardInfoLabel(text: "あとで", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
     
-    private let startStopButton = UIButton(type:.system).createStartStopButton(title: "再生")
+    private let startStopButton = UIButton(type:.system).createButton(title: "再生",fontSize: 30)
     
     private let timerLabel = CardInfoLabel(labelText: "00:00", labelFont: .systemFont(ofSize: 40, weight: .heavy))
     
@@ -77,7 +78,8 @@ class CardView:UIView{
             //realmから取得した時間をプロパティに設定
             self.timer_sec = taskData.first?.time ?? 0
             
-            if self.timer_sec >= timeA{
+            let timeValue = task.breakFlg == 0 ? timeA :timeB
+            if self.timer_sec >= timeValue{
                 return
             }
             
@@ -91,20 +93,29 @@ class CardView:UIView{
     }
     @objc private func updateTimer(_ timer:Timer){
         self.timer_sec += 1
-        //残り秒数(25分 - 経過秒数)
-        let timeLeft = timeA - timer_sec
+        guard let task = self.task else{return}
+        //残り秒数  = (25分 or 5分) - 経過秒数
+        var timeValue = timeA
+        if task.breakFlg == 0{
+            //休憩以外
+            timeValue = timeA
+        }else{
+            //5分休憩の場合
+            timeValue = timeB
+        }
+        let timeLeft = timeValue - timer_sec
         let hour = timeLeft / 60
         let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
         self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
         //円を描画
-        self.pieChartView.value = CGFloat(self.timer_sec)
+        self.pieChartView.value = CGFloat(timeLeft)
         
         if hour == 0 && minutes == 0{
             //音を鳴らす
             playSound(name:"complete")
             //タイマーを止める
             stopTimer()
-            guard let task = self.task else{return}
+            
             //realmからタスクを取得
             let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
             //経過時間をrealmに保存
@@ -218,14 +229,22 @@ class CardView:UIView{
         titleLabel.text = task.title
         contentLabel.text = task.content
 
-        //残り秒数(25分 - 経過秒数)
-        let timeLeft = timeA - task.time
+        //残り秒数  = (25分 or 5分) - 経過秒数
+        var timeValue = timeA
+        if task.breakFlg == 0{
+            //休憩以外
+            timeValue = timeA
+        }else{
+            //5分休憩の場合
+            timeValue = timeB
+        }
+        let timeLeft  = timeValue - task.time
         let hour = timeLeft / 60
         let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
         self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
         //円の表示
-        pieChartView.value = CGFloat(task.time)
-        pieChartView.maxValue = CGFloat(timeA)
+        pieChartView.value = CGFloat(timeLeft)
+        pieChartView.maxValue = CGFloat(timeValue)
         pieChartView.chartTintColor = CommonConst.color3_inverted
 
         

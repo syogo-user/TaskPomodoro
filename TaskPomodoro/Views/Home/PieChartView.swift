@@ -23,7 +23,7 @@ import UIKit
         }
     }
     
-    @IBInspectable var barWidth: CGFloat = 30 {
+    @IBInspectable var barWidth: CGFloat = 10 {
         didSet {
             setup()
         }

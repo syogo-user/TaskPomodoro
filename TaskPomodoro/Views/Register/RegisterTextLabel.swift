@@ -11,8 +11,9 @@ class RegisterTextLabel:UILabel {
         super.init(frame: .zero)
         self.text = text
         self.textColor = .darkGray
-        self.font = .systemFont(ofSize: 14)
+        self.font = .systemFont(ofSize: 18)
     }
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

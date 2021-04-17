@@ -12,6 +12,7 @@ struct CommonConst{
     static let color2 = UIColor.rgb(red:56,green:183 ,blue:171 )//#38b7ab
     static let color3 = UIColor.rgb(red:201,green: 224,blue: 156)//#c9e09c
     
-    static let color3_inverted = UIColor.rgb(red:54,green:31 ,blue:99 ,alpha: 0.8)//#361f63 
+    static let color3_inverted = UIColor.rgb(red:72,green:177 ,blue:177 ,alpha: 1)//
+
 }
 

@@ -15,7 +15,6 @@ class TaskListViewController:UIViewController{
     var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
     var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
     var transition :Bool = false
-//    private var tableView:UITableView!
     private let cellId = "cellId"
 
     lazy var tableView :UITableView = {
@@ -24,32 +23,14 @@ class TaskListViewController:UIViewController{
         tableView.delegate = self
         tableView.estimatedRowHeight = 500
         tableView.rowHeight = UITableView.automaticDimension
-
+        tableView.tableFooterView = UIView()
         return tableView
     }()
-//    lazy var infoCollectionView :UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        //中のviewをもとに大きさを自動で UITableViewDelegate, UITableViewDataSource 設定
-//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-//
-//        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        cv.delegate = self
-//        cv.dataSource = self
-//        cv.backgroundColor = .white
-//        cv.register(InfoCollectionViewCell.self, forCellWithReuseIdentifier: cellId)
-//        return cv
-//    }()
-   
+
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//
-//        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//        tableView.estimatedRowHeight = 500
-//        tableView.rowHeight = UITableView.automaticDimension
         tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
         tableView.isEditing = true //セル並び替え可能
         tableView.allowsSelectionDuringEditing = true //セル選択可能
@@ -59,9 +40,11 @@ class TaskListViewController:UIViewController{
         tableView.addGestureRecognizer(longPressRecognizer)        
         self.view.addSubview(tableView)
         
-        
+        //戻るの非表示
+        self.navigationController?.navigationBar.topItem?.title = ""
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
+
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -93,7 +76,6 @@ class TaskListViewController:UIViewController{
         let point = recognizer.location(in: tableView)
         let indexPath = tableView.indexPathForRow(at: point)
 
-        print("長押し")
         if indexPath == nil{
             return
         }else if recognizer.state == UIGestureRecognizer.State.began{
@@ -279,8 +261,8 @@ extension TaskListViewController : ContextMenuDelegate{
 
 class CustomTablViewCell:UITableViewCell{
     var id = 0
-    let title = CellTextLabel(text: "タイトル")
-    let content = CellTextLabel(text: "コンテンツ")
+    let title = CellTextLabel(text: "タイトル",fontSize: 21.0,textColor: .gray)
+    let content = CellTextLabel(text: "コンテンツ",fontSize: 17.0,textColor: .lightGray)
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -289,7 +271,8 @@ class CustomTablViewCell:UITableViewCell{
         stackview.axis = .vertical
         stackview.distribution = .fillEqually
         addSubview(stackview)
-        stackview.anchor(top:self.topAnchor,bottom:self.bottomAnchor,left:self.leftAnchor,right: self.rightAnchor)
+        title.anchor()
+        stackview.anchor(top:self.topAnchor,bottom:self.bottomAnchor,left:self.leftAnchor,right: self.rightAnchor,topPdding:5,bottomPdding: 5,leftPdding:20,rightPdding: 20)
         
     }
     required init?(coder: NSCoder) {
