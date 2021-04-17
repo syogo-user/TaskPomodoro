@@ -11,12 +11,13 @@ import AVFoundation
 protocol TaskProcessDelegate {
     func taskProcess(complete:Bool,id:Int)
 }
-class CardView:UIView{
+class CardView:UIView,backgroundTimerDelegate{
 
     var taskProcessDelegate:TaskProcessDelegate?
     var audioPlayer: AVAudioPlayer!
     
     let realm = try! Realm()
+    
     
     private var task :TaskData?
     private let gradientLayer = CAGradientLayer()
@@ -43,6 +44,10 @@ class CardView:UIView{
     var timer :Timer!
     //時間
     var timer_sec: Float = 0
+    
+    
+    //タイマー起動中にバックグラウンドに移行したか
+    var timerIsBackground = false
             
     init(task:TaskData) {
         super.init(frame: .zero)
@@ -53,6 +58,34 @@ class CardView:UIView{
         
         startStopButton.addTarget(self, action: #selector(tapStartStop), for: .touchUpInside)
         
+        
+        //SceneDelegateを取得
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let sceneDelegate = windowScene.delegate as? SceneDelegate else {
+            return
+        }
+        sceneDelegate.delegate = self
+        
+    }
+    func checkBackground() {
+        //バックグラウンドへの移行を確認
+        if let _ = timer {
+            timerIsBackground = true
+        }
+    }
+    
+    func setCurrentTimer(_ elapsedTime:Int) {
+        //バックグラウンドでの経過時間をプラスする(経過時間= elapsedTime)
+        timer_sec += Float(elapsedTime)
+        //再びタイマーを起動
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer(_:)),userInfo:nil,repeats: true)
+    }
+    
+    func deleteTimer() {
+        //起動中のタイマーを破棄
+        if let _ = timer {
+            timer.invalidate()
+        }
     }
     private func setupGradientLayer(){
         //グラデーション
