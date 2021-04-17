@@ -56,14 +56,9 @@ class TaskListViewController:UIViewController{
         
         //長押し
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
-//        longPressRecognizer.numberOfTapsRequired = 1 //タップの数
-        tableView.addGestureRecognizer(longPressRecognizer)
-
-        
+        tableView.addGestureRecognizer(longPressRecognizer)        
         self.view.addSubview(tableView)
         
-//        tableView.delegate = self
-//        tableView.dataSource = self
         
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]

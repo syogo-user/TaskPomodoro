@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		10DE44ED30E6D389E1D7F617 /* Pods_TaskPomodoroTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAC2189EF78D45B36D4132E /* Pods_TaskPomodoroTests.framework */; };
 		54E7ADE75E17CED7978B87B6 /* Pods_TaskPomodoro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B63F182BF860880C2530EBC /* Pods_TaskPomodoro.framework */; };
+		91162E0A262A44DC00BDA579 /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91162E09262A44DC00BDA579 /* PieChartView.swift */; };
 		9176C3112618671C0005EF58 /* CommonConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176C3102618671C0005EF58 /* CommonConst.swift */; };
 		9176F55A26195D8500F6FA23 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F55926195D8500F6FA23 /* Task.swift */; };
 		9176F5652619EA4600F6FA23 /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F5642619EA4600F6FA23 /* TaskListViewController.swift */; };
@@ -62,6 +63,7 @@
 		7EE07F2392E207DCA8B059D9 /* Pods-TaskPomodoroTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskPomodoroTests.debug.xcconfig"; path = "Target Support Files/Pods-TaskPomodoroTests/Pods-TaskPomodoroTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8CA62D02810E6F9B20F4253C /* Pods_TaskPomodoro_TaskPomodoroUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaskPomodoro_TaskPomodoroUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA021C9B5F46236DC31EEC8 /* Pods-TaskPomodoro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaskPomodoro.debug.xcconfig"; path = "Target Support Files/Pods-TaskPomodoro/Pods-TaskPomodoro.debug.xcconfig"; sourceTree = "<group>"; };
+		91162E09262A44DC00BDA579 /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		9176C3102618671C0005EF58 /* CommonConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonConst.swift; sourceTree = "<group>"; };
 		9176F55926195D8500F6FA23 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		9176F5642619EA4600F6FA23 /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				91B3EF2A26184B330096519B /* CardView.swift */,
 				91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */,
 				91B3EF3426184B790096519B /* CardImageView.swift */,
+				91162E09262A44DC00BDA579 /* PieChartView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91162E0A262A44DC00BDA579 /* PieChartView.swift in Sources */,
 				91B3EF4D26184C200096519B /* UIButton-Extention.swift in Sources */,
 				9176F56F261A75C000F6FA23 /* RegisterTextField.swift in Sources */,
 				91B3EF3026184B5D0096519B /* CardInfoLabel.swift in Sources */,

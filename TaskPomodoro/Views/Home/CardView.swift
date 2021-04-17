@@ -37,6 +37,8 @@ class CardView:UIView{
     
     private let timerLabel = CardInfoLabel(labelText: "00:00", labelFont: .systemFont(ofSize: 40, weight: .heavy))
     
+    var pieChartView = PieChartView()
+    
     var timer :Timer!
     //時間
     var timer_sec: Float = 0
@@ -80,6 +82,7 @@ class CardView:UIView{
             }
             
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer(_:)),userInfo:nil,repeats: true)
+            
             self.startStopButton.setTitle("一時停止", for: .normal)
         }else{
             //タイマーを一時停止
@@ -93,6 +96,8 @@ class CardView:UIView{
         let hour = timeLeft / 60
         let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
         self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
+        //円を描画
+        self.pieChartView.value = CGFloat(self.timer_sec)
         
         if hour == 0 && minutes == 0{
             //音を鳴らす
@@ -190,33 +195,40 @@ class CardView:UIView{
         baseStackView.axis = .horizontal//横並び
         
         //Viewの配置を作成
+
         addSubview(cardImageView)
+        addSubview(pieChartView)
 //        addSubview(titleLabel)
         addSubview(startStopButton)
         addSubview(timerLabel)
         addSubview(baseStackView)
         addSubview(goodLabel)
         addSubview(nopeLabel)
+        
 
         cardImageView.anchor(top:topAnchor,bottom:bottomAnchor,left: leftAnchor,right: rightAnchor,leftPdding: 10,rightPdding: 10)
-        startStopButton.anchor(bottom:bottomAnchor, centerX:self.centerXAnchor,width: 200,height: 100,bottomPdding: 120)
-        timerLabel.anchor(bottom:startStopButton.topAnchor, centerX:self.centerXAnchor,width: 200,height: 50,bottomPdding: 10)
-//        titleLabel.anchor(height:100)
-//        contentLabel.anchor(height:150)
+        pieChartView.anchor(centerY: centerYAnchor,centerX: centerXAnchor,width: 250,height: 250)
+        timerLabel.anchor(centerY:centerYAnchor, centerX:centerXAnchor,width: 200,height: 50)
+        startStopButton.anchor(top:pieChartView.bottomAnchor, centerX:centerXAnchor,width: 200,height: 100,topPdding: 10)
         baseStackView.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,topPdding: 80,leftPdding: 20,rightPdding: 20)
-        
         goodLabel.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,width: 140,height: 55,topPdding: 25 ,leftPdding: 20)
         nopeLabel.anchor(top:cardImageView.topAnchor,right:cardImageView.rightAnchor,width:140,height: 55,topPdding: 25,rightPdding: 20)
         
         //タスク情報をViewに反映
         titleLabel.text = task.title
         contentLabel.text = task.content
-        
+
         //残り秒数(25分 - 経過秒数)
-        let timeLeft = 1500 - task.time
+        let timeLeft = timeA - task.time
         let hour = timeLeft / 60
         let minutes = timeLeft.truncatingRemainder(dividingBy: 60.0) //あまり
         self.timerLabel.text = String(format: "%02d", Int(hour)) + " : " + String(format: "%02d", Int(minutes))
+        //円の表示
+        pieChartView.value = CGFloat(task.time)
+        pieChartView.maxValue = CGFloat(timeA)
+        pieChartView.chartTintColor = CommonConst.color3_inverted
+
+        
         //プロパティに設定
         self.task = task
         
