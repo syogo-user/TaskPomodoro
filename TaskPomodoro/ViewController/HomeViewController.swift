@@ -26,9 +26,10 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         removeCardInfo()
         setCardInfo()
-        bottomControlView.reloadView.button?.addTarget(self, action: #selector(tapReload), for: .touchUpInside)
-        bottomControlView.heartView.button?.addTarget(self, action: #selector(tapHeart), for: .touchUpInside)
-        bottomControlView.starView.button?.addTarget(self, action: #selector(tapStar), for: .touchUpInside)
+        bottomControlView.list.button?.addTarget(self, action: #selector(tapList), for: .touchUpInside)
+        bottomControlView.addView.button?.addTarget(self, action: #selector(tapAdd), for: .touchUpInside)
+        bottomControlView.deleteView.button?.addTarget(self, action: #selector(tapDelete), for: .touchUpInside)
+        bottomControlView.resetView.button?.addTarget(self, action: #selector(tapReset), for: .touchUpInside)
         self.navigationController?.navigationBar.isHidden = true
     }
     //カードがすでにviewに存在する場合、一度クリアする
@@ -46,7 +47,50 @@ class HomeViewController: UIViewController {
             card.anchor(top:self.cardView.topAnchor,bottom: self.cardView.bottomAnchor,left: self.cardView.leftAnchor,right: self.cardView.rightAnchor)
         }
     }
-    @objc func tapReload(){
+    @objc func tapList(){
+        //タイマーが起動している場合は止める
+        timerAllStop()
+            
+        //画面遷移
+        let taskListController = TaskListViewController()
+        self.navigationController?.pushViewController(taskListController, animated: true)
+    }
+    @objc func tapAdd(){
+        //タスクを追加
+        //画面遷移
+        let taskListController = TaskListViewController()
+        taskListController.transition = true
+        self.navigationController?.pushViewController(taskListController, animated: false)
+    }
+    @objc func tapDelete(){
+        //削除
+        //タイマーが起動している場合は止める
+        timerAllStop()
+        //配列の先頭データを削除
+        try! realm.write(){
+            self.realm.delete(taskDataArray[0])
+        }
+
+        //再描画
+        removeCardInfo()
+        setCardInfo()
+                        
+    }
+    @objc func tapReset(){
+        //タイマーが起動している場合は止める
+        timerAllStop()
+        //リセット
+        try! realm.write(){
+            //経過時間を0にリセット
+            taskDataArray[0].time = 0
+            //再描画
+            removeCardInfo()
+            setCardInfo()
+        }
+
+        
+    }
+    private func timerAllStop(){
         //タイマーが起動している場合は止める
         let subviews = self.cardView.subviews
         for subview in subviews {
@@ -55,24 +99,6 @@ class HomeViewController: UIViewController {
                 cardView.stopTimer()
             }
         }
-            
-        //画面遷移
-        let taskListController = TaskListViewController()
-        self.navigationController?.pushViewController(taskListController, animated: true)
-    }
-    @objc func tapHeart(){
-        //タスクを追加
-        //画面遷移
-        let taskListController = TaskListViewController()
-        taskListController.transition = true
-        self.navigationController?.pushViewController(taskListController, animated: false)
-    }
-    @objc func tapStar(){
-        //削除
-        
-        
-        
-        
     }
     private func setupLayout(){
         view.backgroundColor = .white
@@ -122,6 +148,7 @@ extension HomeViewController:TaskProcessDelegate{
                 arrayIndex = index
             }
         }
+        
         //並び替え処理
         try! realm.write {
             let sourceObject = taskDataArray[arrayIndex]
@@ -152,9 +179,7 @@ extension HomeViewController:TaskProcessDelegate{
                 arrayIndex = index
             }
         }
-        //タイマーを止める
-        let cardView = self.cardView.viewWithTag(id) as? CardView
-        cardView?.stopTimer()
+
 //
         //completeFlgに1を立てる//完了のフラグ
         try! realm.write{
