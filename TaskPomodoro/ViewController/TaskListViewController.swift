@@ -40,17 +40,22 @@ class TaskListViewController:UIViewController{
         tableView.addGestureRecognizer(longPressRecognizer)        
         self.view.addSubview(tableView)
         
-        //戻るの非表示
-        self.navigationController?.navigationBar.topItem?.title = ""
+
+        
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
+        self.navigationController?.navigationBar.tintColor = CommonConst.color1
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.color1]
+        //戻るの非表示
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.navigationItem.title = "一覧"
 
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
         self.navigationController?.navigationBar.isHidden = false
-        
+
         //遷移するか判定
         transitionJudge()
     }

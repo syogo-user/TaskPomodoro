@@ -17,7 +17,7 @@ class RegisterTaskViewController:UIViewController{
     private let titleTextField = RegisterTextField(placeHolder: "タイトル")
     private let contentTextField = RegisterTextField(placeHolder: "内容")
     private let colorChoiceButton = UIButton(type:.system).createButton(title: "カラー選択",fontSize: 25,textColor:UIColor.darkGray)
-    private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: UIColor.darkGray)
+    private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.color1)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -30,8 +30,9 @@ class RegisterTaskViewController:UIViewController{
         self.navigationController?.navigationBar.topItem?.title = ""
         let addBarButtonItem = UIBarButtonItem(title: "5分休憩", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapHaveABreak))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
-        
-        
+        self.navigationController?.navigationBar.tintColor = CommonConst.color1
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.color1]
+        self.navigationItem.title = "更新画面"
     }
     @objc private func tapView(){
         view.endEditing(true)

@@ -64,19 +64,35 @@ class HomeViewController: UIViewController {
     }
     @objc func tapDelete(){
         //削除
-        //タイマーが起動している場合は止める
-        timerAllStop()
-        //配列の先頭データを削除
-        try! realm.write(){
-            self.realm.delete(taskDataArray[0])
+        if taskDataArray.count == 0 {
+            //taskDataArrayが0件の場合は処理を行わない
+            return
         }
+        //メッセージを表示
+        let dialog = UIAlertController(title: "削除してもよろしいですか？", message: "", preferredStyle: .alert)
+        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
+            //タイマーが起動している場合は止める
+            self.timerAllStop()
+            //配列の先頭データを削除
+            try! self.realm.write(){
+                self.realm.delete(self.taskDataArray[0])
+            }
 
-        //再描画
-        removeCardInfo()
-        setCardInfo()
+            //再描画
+            self.removeCardInfo()
+            self.setCardInfo()
+        }))
+        dialog.addAction(UIAlertAction(title: "CANCEL", style: .default, handler:nil))
+        self.present(dialog, animated: true, completion: nil)
+
+
                         
     }
     @objc func tapReset(){
+        if taskDataArray.count == 0 {
+            //taskDataArrayが0件の場合は処理を行わない
+            return
+        }
         //タイマーが起動している場合は止める
         timerAllStop()
         //リセット
