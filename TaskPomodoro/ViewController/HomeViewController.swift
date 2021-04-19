@@ -196,7 +196,6 @@ extension HomeViewController:TaskProcessDelegate{
             }
         }
 
-//
         //completeFlgに1を立てる//完了のフラグ
         try! realm.write{
             taskDataArray[arrayIndex].completeFlg = 1

@@ -52,7 +52,7 @@ class CardView:UIView,backgroundTimerDelegate{
     init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
-        setupGradientLayer()
+        setupGradientLayer(colorIndex: 1)//TODO
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panCargView))
         self.addGestureRecognizer(panGesture)//自分自身にpanGestureを設定する
         
@@ -87,9 +87,12 @@ class CardView:UIView,backgroundTimerDelegate{
             timer.invalidate()
         }
     }
-    private func setupGradientLayer(){
+    private func setupGradientLayer(colorIndex:Int){
+        let color = CommonConst.gradientColor[colorIndex]
+        let color1 = color["startColor"] ?? UIColor.white.cgColor
+        let color2 = color["endColor"] ??  UIColor.white.cgColor
         //グラデーション
-        gradientLayer.colors = [CommonConst.color2.cgColor,CommonConst.color3.cgColor]
+        gradientLayer.colors = [color1,color2]
         //グラデーションの位置
         gradientLayer.locations = [0.3,1.1]
         cardImageView.layer.addSublayer(gradientLayer)

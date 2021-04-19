@@ -40,7 +40,6 @@ class TaskListViewController:UIViewController{
         tableView.addGestureRecognizer(longPressRecognizer)        
         self.view.addSubview(tableView)
         
-
         
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
