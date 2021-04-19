@@ -14,6 +14,7 @@ class TaskData :Object{
     @objc dynamic var time:Float = 0
     @objc dynamic var completeFlg = 0 //0：未完  1：完了
     @objc dynamic var breakFlg = 0 //0：休憩以外　 1:休憩
+    @objc dynamic var colorIndex = 0 
     // id をプライマリーキーとして設定
     override static func primaryKey() -> String? {
         return "id"

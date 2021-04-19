@@ -31,7 +31,6 @@
 		91B3EEF7261838D60096519B /* TaskPomodoroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEF6261838D60096519B /* TaskPomodoroTests.swift */; };
 		91B3EF02261838D60096519B /* TaskPomodoroUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF01261838D60096519B /* TaskPomodoroUITests.swift */; };
 		91B3EF1E261849BF0096519B /* BottomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF1D261849BF0096519B /* BottomControlView.swift */; };
-		91B3EF2626184ABF0096519B /* TopControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2526184ABF0096519B /* TopControlView.swift */; };
 		91B3EF2B26184B330096519B /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2A26184B330096519B /* CardView.swift */; };
 		91B3EF3026184B5D0096519B /* CardInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */; };
 		91B3EF3526184B790096519B /* CardImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EF3426184B790096519B /* CardImageView.swift */; };
@@ -95,7 +94,6 @@
 		91B3EF01261838D60096519B /* TaskPomodoroUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPomodoroUITests.swift; sourceTree = "<group>"; };
 		91B3EF03261838D60096519B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		91B3EF1D261849BF0096519B /* BottomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomControlView.swift; sourceTree = "<group>"; };
-		91B3EF2526184ABF0096519B /* TopControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopControlView.swift; sourceTree = "<group>"; };
 		91B3EF2A26184B330096519B /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfoLabel.swift; sourceTree = "<group>"; };
 		91B3EF3426184B790096519B /* CardImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardImageView.swift; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				91B3EF1D261849BF0096519B /* BottomControlView.swift */,
-				91B3EF2526184ABF0096519B /* TopControlView.swift */,
 				91B3EF2A26184B330096519B /* CardView.swift */,
 				91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */,
 				91B3EF3426184B790096519B /* CardImageView.swift */,
@@ -552,7 +549,6 @@
 				91B3EF4826184BF70096519B /* UIColor-Extention.swift in Sources */,
 				91B3EEE2261838D50096519B /* SceneDelegate.swift in Sources */,
 				91B3EF3B26184BA10096519B /* UIImage-Extention.swift in Sources */,
-				91B3EF2626184ABF0096519B /* TopControlView.swift in Sources */,
 				91981CC7262DA7D200223FA6 /* ColorCollectionViewController.swift in Sources */,
 				91B3EF2B26184B330096519B /* CardView.swift in Sources */,
 				91B3EF3526184B790096519B /* CardImageView.swift in Sources */,

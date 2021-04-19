@@ -18,6 +18,10 @@ class RegisterTaskViewController:UIViewController{
     private let titleTextField = RegisterTextField(placeHolder: "タイトル")
     private let contentTextView = RegisterTextView(text:"内容")
     
+    var titleText = ""
+    var contentText = ""
+    
+    var colorChoiceAfterFlg = false
     private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色",fontSize: 25,textColor:CommonConst.color1)
     private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.color1)
     private let colorView = RegisterView(colorIndex: 0)
@@ -53,6 +57,7 @@ class RegisterTaskViewController:UIViewController{
             self.task.content = "Have A Break"
             self.task.time = 0
             self.task.breakFlg = 1 //休憩
+            self.task.colorIndex = self.colorArrayIndex //グラデーション
             self.realm.add(self.task,update: .modified)
         }
         self.navigationController?.popViewController(animated: true)
@@ -79,8 +84,14 @@ class RegisterTaskViewController:UIViewController{
         stackView.anchor(top:view.topAnchor,left: view.leftAnchor,right: view.rightAnchor,topPdding: navBarHeight + 60 ,leftPdding: 20,rightPdding: 20)
         registerButton.anchor(bottom:view.bottomAnchor,left: view.leftAnchor,right: view.rightAnchor,height: 60,bottomPdding: 50,leftPdding: 80,rightPdding: 80)
 
-        titleTextField.text = task.title
-        contentTextView.text = task.content
+        
+        if colorChoiceAfterFlg {
+            titleTextField.text = titleText
+            contentTextView.text = contentText
+        }else{
+            titleTextField.text = task.title
+            contentTextView.text = task.content
+        }
         //グラデーションの設定 
         colorView.setGradentColor(colorIndex:self.colorArrayIndex)
     }
@@ -99,6 +110,7 @@ class RegisterTaskViewController:UIViewController{
             self.task.content = self.contentTextView.text ?? ""
             self.task.time = 0
             self.task.breakFlg = 0 //休憩以外
+            self.task.colorIndex = self.colorArrayIndex //グラデーション
             self.realm.add(self.task,update: .modified)
         }
         self.navigationController?.popViewController(animated: true)
@@ -107,7 +119,8 @@ class RegisterTaskViewController:UIViewController{
         //カラー選択画面に遷移
         let viewController = ColorCollectionViewController()
         viewController.modalPresentationStyle = .fullScreen
-//        navigationController?.pushViewController(viewController, animated: true)
+        viewController.titleText = self.titleTextField.text ?? ""
+        viewController.contentText = self.contentTextView.text ?? ""
         self.present(viewController, animated:true, completion: nil)
 
     }

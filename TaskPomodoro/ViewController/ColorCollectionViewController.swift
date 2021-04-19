@@ -8,7 +8,8 @@
 import UIKit
 class ColorCollectionViewController:UIViewController{
     private let cellId = "cellId"
-    
+    var titleText = ""
+    var contentText = ""
     lazy var collectionView : UICollectionView = {
         //CollectionViewのサイズ調整
         let layout = UICollectionViewFlowLayout()
@@ -26,22 +27,9 @@ class ColorCollectionViewController:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(collectionView)
-        collectionView.anchor(top:view.topAnchor,bottom:view.bottomAnchor, left: view.leftAnchor,right:view.rightAnchor,topPdding: 10,bottomPdding: 10, leftPdding: 10,rightPdding: 10)
+        collectionView.anchor(top:view.topAnchor,bottom:view.bottomAnchor, left: view.leftAnchor,right:view.rightAnchor,topPdding: 10,bottomPdding: 10, leftPdding: 0,rightPdding: 0)
                               
-    }
-    
-    
-    
-    
-//    lazy var tableView :UITableView = {
-//        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//        tableView.estimatedRowHeight = 500
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.tableFooterView = UIView()
-//        return tableView
-//    }()
+    }    
 }
 
 extension ColorCollectionViewController:UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
@@ -56,15 +44,20 @@ extension ColorCollectionViewController:UICollectionViewDataSource,UICollectionV
         cell.setGradientColor(colorIndex:indexPath.item)
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let horizontalSpace : CGFloat = 20
+        let cellSize : CGFloat = self.view.bounds.width / 3 - horizontalSpace
+        return CGSize(width: cellSize, height: cellSize)
+    }
     // cell選択時に呼ばれる関数
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //前画面への値の受け渡し
-//        let preVC = self.presentingViewController as! RegisterTaskViewController
-//        preVC.colorArrayIndex = indexPath.item
-//        self.dismiss(animated: true, completion:nil)
         let preNC = self.presentingViewController as! UINavigationController
         let preVC = preNC.viewControllers[preNC.viewControllers.count - 1] as! RegisterTaskViewController
-        preVC.colorArrayIndex = indexPath.item  
+        preVC.colorArrayIndex = indexPath.item
+        preVC.colorChoiceAfterFlg = true
+        preVC.titleText = self.titleText
+        preVC.contentText = self.contentText
         self.dismiss(animated: true, completion:nil)
     }
     

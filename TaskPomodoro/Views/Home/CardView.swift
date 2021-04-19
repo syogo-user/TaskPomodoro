@@ -52,7 +52,7 @@ class CardView:UIView,backgroundTimerDelegate{
     init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
-        setupGradientLayer(colorIndex: 1)//TODO
+        setupGradientLayer(colorIndex: task.colorIndex)
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panCargView))
         self.addGestureRecognizer(panGesture)//自分自身にpanGestureを設定する
         
