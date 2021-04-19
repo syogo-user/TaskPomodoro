@@ -281,7 +281,7 @@ class CardView:UIView,backgroundTimerDelegate{
         //円の表示
         pieChartView.value = CGFloat(timeLeft)
         pieChartView.maxValue = CGFloat(timeValue)
-        pieChartView.chartTintColor = CommonConst.color3_inverted
+        pieChartView.chartTintColor = CommonConst.gradientColorInverted[task.colorIndex]
 
         
         //プロパティに設定

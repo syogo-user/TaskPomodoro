@@ -22,8 +22,8 @@ class RegisterTaskViewController:UIViewController{
     var contentText = ""
     
     var colorChoiceAfterFlg = false
-    private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色",fontSize: 25,textColor:CommonConst.color1)
-    private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.color1)
+    private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色",fontSize: 25,textColor:CommonConst.lightClearGray)
+    private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.lightClearGray)
     private let colorView = RegisterView(colorIndex: 0)
     
     override func viewDidLoad() {
@@ -39,8 +39,8 @@ class RegisterTaskViewController:UIViewController{
         self.navigationController?.navigationBar.topItem?.title = ""
         let addBarButtonItem = UIBarButtonItem(title: "5分休憩", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapHaveABreak))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
-        self.navigationController?.navigationBar.tintColor = CommonConst.color1
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.color1]
+        self.navigationController?.navigationBar.tintColor = CommonConst.lightClearGray
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.lightClearGray]
         self.navigationItem.title = "更新画面"
     }
     override func viewWillAppear(_ animated: Bool) {

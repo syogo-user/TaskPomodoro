@@ -43,8 +43,8 @@ class TaskListViewController:UIViewController{
         
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
-        self.navigationController?.navigationBar.tintColor = CommonConst.color1
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.color1]
+        self.navigationController?.navigationBar.tintColor = CommonConst.lightClearGray
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.lightClearGray]
         //戻るの非表示
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "一覧"
