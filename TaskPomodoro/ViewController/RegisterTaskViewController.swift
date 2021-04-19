@@ -22,7 +22,7 @@ class RegisterTaskViewController:UIViewController{
     var contentText = ""
     
     var colorChoiceAfterFlg = false
-    private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色",fontSize: 25,textColor:CommonConst.lightClearGray)
+    private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色変更",fontSize: 18,textColor:CommonConst.lightClearGray)
     private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.lightClearGray)
     private let colorView = RegisterView(colorIndex: 0)
     
@@ -71,8 +71,10 @@ class RegisterTaskViewController:UIViewController{
         contentTextView.anchor(height:100)
         
         
-        let horizonStackView = UIStackView(arrangedSubviews: [colorView,colorChoiceButton])
+        colorView.anchor(height:60)
+        let horizonStackView = UIStackView(arrangedSubviews: [colorChoiceButton,colorView])
         horizonStackView.axis  = .horizontal
+        horizonStackView.spacing = 20
         
         let stackView = UIStackView(arrangedSubviews: [titleLabel,titleTextField,contentLabel,contentTextView,horizonStackView])
         stackView.axis = .vertical
@@ -88,12 +90,17 @@ class RegisterTaskViewController:UIViewController{
         if colorChoiceAfterFlg {
             titleTextField.text = titleText
             contentTextView.text = contentText
+            //グラデーションの設定
+            colorView.setGradentColor(colorIndex:self.colorArrayIndex)
         }else{
             titleTextField.text = task.title
             contentTextView.text = task.content
+            //グラデーションの設定
+            colorView.setGradentColor(colorIndex:task.colorIndex)
         }
-        //グラデーションの設定 
-        colorView.setGradentColor(colorIndex:self.colorArrayIndex)
+        
+        
+        
     }
     @objc private func tapRegisterButton(){
         

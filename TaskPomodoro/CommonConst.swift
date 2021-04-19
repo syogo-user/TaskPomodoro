@@ -10,8 +10,8 @@ import UIKit
 struct CommonConst{
     static let lightClearGray = UIColor.rgb(red:29,green: 164,blue: 185)//#1da4b9
     static let gradientColor  = [
-        ["startColor":UIColor.rgb(red:56,green:183,blue:171).cgColor,
-         "endColor":UIColor.rgb(red:201,green:224,blue:156).cgColor,
+        ["startColor":UIColor.rgb(red:30,green:183,blue:181).cgColor,
+         "endColor":UIColor.rgb(red:255,green:255,blue:155).cgColor,
         ],
         ["startColor":UIColor.rgb(red:252,green:229,blue:207).cgColor,
          "endColor":UIColor.rgb(red:255,green:172,blue:214).cgColor,
