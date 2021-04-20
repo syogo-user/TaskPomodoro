@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import UserNotifications
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -15,6 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var myNavigationController :UINavigationController?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert,.sound]) { (granted, error) in
+            
+        }
         // Override point for customization after application launch.
 //        //初期表示画面
 //        let rootViewController = HomeViewController()

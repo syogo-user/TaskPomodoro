@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import AVFoundation
+import UserNotifications
 protocol TaskProcessDelegate {
     func taskProcess(complete:Bool,id:Int)
 }
@@ -48,7 +49,9 @@ class CardView:UIView,backgroundTimerDelegate{
     
     //タイマー起動中にバックグラウンドに移行したか
     var timerIsBackground = false
-            
+    //バックグランド中に指定時間を過ぎたか true:過ぎた false：過ぎていない
+    var tooMuchTimeBackground = false
+    
     init(task:TaskData) {
         super.init(frame: .zero)
         setupLayout(task:task)
@@ -77,8 +80,31 @@ class CardView:UIView,backgroundTimerDelegate{
     func setCurrentTimer(_ elapsedTime:Int) {
         //バックグラウンドでの経過時間をプラスする(経過時間= elapsedTime)
         timer_sec += Float(elapsedTime)
+        guard let task = self.task else {return}
+        let timeValue = task.breakFlg == 0 ? timeA :timeB
+        if timeValue <= self.timer_sec{
+            self.timer_sec = timeValue - 1
+            tooMuchTimeBackground = true //バックグランドで指定時間を超えた
+            //指定の時間を超えていた場合
+//            //ラベルを00:00とする
+//            self.timerLabel.text = String(format: "%02d", 0) + " : " + String(format: "%02d", 0)
+//            //円を0で描画
+//            self.pieChartView.value = CGFloat(0)
+//            //realmからタスクを取得
+//            let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
+//            //経過時間をrealmに保存 (2500 or 300を保存)
+//            try! realm.write{
+//                taskData.first?.time = timeValue
+//            }
+//            self.startStopButton.setTitle("再生", for: .normal)
+        }else{
+            tooMuchTimeBackground = false //フォアグラウンドで指定時間を超えた
+        }
         //再びタイマーを起動
         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer(_:)),userInfo:nil,repeats: true)
+        
+        //ローカル通知をキャンセル
+        resetNotification()
     }
     
     func deleteTimer() {
@@ -86,6 +112,60 @@ class CardView:UIView,backgroundTimerDelegate{
         if let _ = timer {
             timer.invalidate()
         }
+        
+        //ローカル通知の設定
+        setNotification()
+        
+    }
+    private func resetNotification(){
+        guard let task = self.task  else {return}
+                    
+        //ローカル通知をキャンセル
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [String(task.id)])
+        //未通知のローカル通知一覧をログに表示
+        center.getPendingNotificationRequests { (requests:[UNNotificationRequest]) in
+            for request in requests{
+                print(request)
+            }
+        }
+    }
+    private func setNotification(){
+        guard let task = self.task else { return }
+        //ローカル通知を設定
+        let content = UNMutableNotificationContent()
+        content.title = task.title
+        content.body = task.content
+        content.sound = .default
+        
+
+        let date = Date()
+
+        let timeValue = task.breakFlg == 0 ? timeA :timeB
+        //残り時間 = (2500秒 or 300秒) - 経過時間
+        let timeLeft = timeValue - self.timer_sec
+        print(self.timer_sec)
+        print(Double(timeLeft))
+        let date2 = date.addingTimeInterval(Double(timeLeft)) // ●秒すすめる
+                
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.year,.month,.day,.hour,.minute,.second], from:date2 )
+        let trigger = UNCalendarNotificationTrigger(dateMatching:dateComponents , repeats: false)
+        
+        //ローカル通知を作成
+        let request = UNNotificationRequest(identifier: String(task.id), content: content, trigger: trigger)
+        //ローカル通知を登録
+        let center = UNUserNotificationCenter.current()
+        center.add(request) { (error) in
+            print(error ?? "ローカル通知登録成功")
+        }
+        //未通知のローカル通知一覧をログに表示
+        center.getPendingNotificationRequests { (requests:[UNNotificationRequest]) in
+            for request in requests{
+                print(request)
+            }
+        }
+        
     }
     private func setupGradientLayer(colorIndex:Int){
         let color = CommonConst.gradientColor[colorIndex]
@@ -146,9 +226,13 @@ class CardView:UIView,backgroundTimerDelegate{
         //円を描画
         self.pieChartView.value = CGFloat(timeLeft)
         
-        if hour == 0 && minutes == 0{
-            //音を鳴らす
-            playSound(name:"complete")
+        if hour <= 0 && minutes <= 0{
+            if tooMuchTimeBackground == false{
+                //指定時間をフォアグラウンドで過ぎた場合
+                //音を鳴らす
+                playSound(name:"complete")
+            }
+
             //タイマーを止める
             stopTimer()
             
@@ -245,7 +329,6 @@ class CardView:UIView,backgroundTimerDelegate{
 
         addSubview(cardImageView)
         addSubview(pieChartView)
-//        addSubview(titleLabel)
         addSubview(startStopButton)
         addSubview(timerLabel)
         addSubview(baseStackView)
