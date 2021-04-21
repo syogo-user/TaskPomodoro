@@ -316,9 +316,9 @@ class CardView:UIView,backgroundTimerDelegate{
         pieChartView.anchor(centerY: centerYAnchor,centerX: centerXAnchor,width: 250,height: 250)
         timerLabel.anchor(centerY:centerYAnchor, centerX:centerXAnchor,width: 200,height: 50)
         startStopButton.anchor(top:pieChartView.bottomAnchor, centerX:centerXAnchor,width: 200,height: 100,topPdding: 10)
-        baseStackView.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,topPdding: 80,leftPdding: 20,rightPdding: 20)
-        goodLabel.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,width: 140,height: 55,topPdding: 25 ,leftPdding: 20)
-        nopeLabel.anchor(top:cardImageView.topAnchor,right:cardImageView.rightAnchor,width:140,height: 55,topPdding: 25,rightPdding: 20)
+        baseStackView.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,right: cardImageView.rightAnchor,topPdding: 60,leftPdding: 20,rightPdding: 20)
+        goodLabel.anchor(top:cardImageView.topAnchor,left:cardImageView.leftAnchor,width: 140,height: 55,topPdding: 10 ,leftPdding: 20)
+        nopeLabel.anchor(top:cardImageView.topAnchor,right:cardImageView.rightAnchor,width:140,height: 55,topPdding: 10,rightPdding: 20)
         
         //タスク情報をViewに反映
         titleLabel.text = task.title
