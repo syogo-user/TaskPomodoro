@@ -10,7 +10,6 @@ class CardInfoLabel:UILabel{
     //nopeとgoodのラベル
     init(text :String,textColor:UIColor) {
         super.init(frame: .zero)
-            
         font = .boldSystemFont(ofSize: 45)
         self.text = text
         self.textColor = textColor

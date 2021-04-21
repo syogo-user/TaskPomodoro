@@ -13,12 +13,17 @@ protocol TaskProcessDelegate {
     func taskProcess(complete:Bool,id:Int)
 }
 class CardView:UIView,backgroundTimerDelegate{
-
-    var taskProcessDelegate:TaskProcessDelegate?
-    var audioPlayer: AVAudioPlayer!
     
     let realm = try! Realm()
-    
+    var taskProcessDelegate:TaskProcessDelegate?
+    var audioPlayer: AVAudioPlayer!
+    var pieChartView = PieChartView()
+    var timer :Timer!
+    var timer_sec: Float = 0    //時間
+    //タイマー起動中にバックグラウンドに移行したか
+    var timerIsBackground = false
+    //バックグランド中に指定時間を過ぎたか true:過ぎた false：過ぎていない
+    var tooMuchTimeBackground = false
     
     private var task :TaskData?
     private let gradientLayer = CAGradientLayer()
@@ -26,31 +31,14 @@ class CardView:UIView,backgroundTimerDelegate{
     private let timeB :Float = 300.0 //300秒 = 5分
     
     //MARK:UIViews
-    private let cardImageView = CardImageView(frame:
-                                                .zero)
+    private let cardImageView = CardImageView(frame:.zero)
     private let titleLabel = CardInfoLabel(labelText: "タイトル", labelFont: .systemFont(ofSize: 40, weight: .heavy))
-    
-    private let contentLabel  = CardInfoLabel(labelText: "内容", labelFont: .systemFont(ofSize: 25, weight: .regular))
-
+    private let subTitleLabel  = CardInfoLabel(labelText: "サブタイトル", labelFont: .systemFont(ofSize: 25, weight: .regular))
     private let goodLabel = CardInfoLabel(text: "完了", textColor: UIColor.rgb(red:137,green: 223,blue: 86))
-
     private let nopeLabel = CardInfoLabel(text: "あとで", textColor: UIColor.rgb(red:222,green: 110,blue: 110))
-    
     private let startStopButton = UIButton(type:.system).createButton(title: "再生",fontSize: 30)
-    
     private let timerLabel = CardInfoLabel(labelText: "00:00", labelFont: .systemFont(ofSize: 40, weight: .heavy))
-    
-    var pieChartView = PieChartView()
-    
-    var timer :Timer!
-    //時間
-    var timer_sec: Float = 0
-    
-    
-    //タイマー起動中にバックグラウンドに移行したか
-    var timerIsBackground = false
-    //バックグランド中に指定時間を過ぎたか true:過ぎた false：過ぎていない
-    var tooMuchTimeBackground = false
+
     
     init(task:TaskData) {
         super.init(frame: .zero)
@@ -58,10 +46,9 @@ class CardView:UIView,backgroundTimerDelegate{
         setupGradientLayer(colorIndex: task.colorIndex)
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panCargView))
         self.addGestureRecognizer(panGesture)//自分自身にpanGestureを設定する
-        
-        startStopButton.addTarget(self, action: #selector(tapStartStop), for: .touchUpInside)
-        
-        
+        self.startStopButton.addTarget(self, action: #selector(tapStartStop), for: .touchUpInside)
+        self.titleLabel.adjustsFontSizeToFitWidth = true
+        self.subTitleLabel.adjustsFontSizeToFitWidth = true
         //SceneDelegateを取得
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
             let sceneDelegate = windowScene.delegate as? SceneDelegate else {
@@ -85,18 +72,6 @@ class CardView:UIView,backgroundTimerDelegate{
         if timeValue <= self.timer_sec{
             self.timer_sec = timeValue - 1
             tooMuchTimeBackground = true //バックグランドで指定時間を超えた
-            //指定の時間を超えていた場合
-//            //ラベルを00:00とする
-//            self.timerLabel.text = String(format: "%02d", 0) + " : " + String(format: "%02d", 0)
-//            //円を0で描画
-//            self.pieChartView.value = CGFloat(0)
-//            //realmからタスクを取得
-//            let taskData = try! Realm().objects(TaskData.self).filter("id == %@",task.id)
-//            //経過時間をrealmに保存 (2500 or 300を保存)
-//            try! realm.write{
-//                taskData.first?.time = timeValue
-//            }
-//            self.startStopButton.setTitle("再生", for: .normal)
         }else{
             tooMuchTimeBackground = false //フォアグラウンドで指定時間を超えた
         }
@@ -318,7 +293,8 @@ class CardView:UIView,backgroundTimerDelegate{
     }
 
     private func setupLayout(task:TaskData){
-        let infoVerticalStackView = UIStackView(arrangedSubviews: [titleLabel,contentLabel])
+//        contentLabel.anchor(height:80)
+        let infoVerticalStackView = UIStackView(arrangedSubviews: [titleLabel,subTitleLabel])
         infoVerticalStackView.axis = .vertical//縦並び
         
             
@@ -346,7 +322,7 @@ class CardView:UIView,backgroundTimerDelegate{
         
         //タスク情報をViewに反映
         titleLabel.text = task.title
-        contentLabel.text = task.content
+        subTitleLabel.text = task.content
 
         //残り秒数  = (25分 or 5分) - 経過秒数
         var timeValue = timeA

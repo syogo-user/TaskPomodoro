@@ -7,9 +7,10 @@
 
 import UIKit
 class ColorCollectionViewController:UIViewController{
-    private let cellId = "cellId"
+
     var titleText = ""
     var contentText = ""
+    private let cellId = "cellId"
     lazy var collectionView : UICollectionView = {
         //CollectionViewのサイズ調整
         let layout = UICollectionViewFlowLayout()

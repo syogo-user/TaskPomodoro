@@ -18,10 +18,10 @@
 		9176F579261A777A00F6FA23 /* RegisterTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F578261A777A00F6FA23 /* RegisterTextLabel.swift */; };
 		9176F589261A87DA00F6FA23 /* TaskData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F588261A87DA00F6FA23 /* TaskData.swift */; };
 		9176F58F261B3CC800F6FA23 /* CellTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9176F58E261B3CC800F6FA23 /* CellTextLabel.swift */; };
-		917AB5C0262CFACF00E123EA /* RegisterTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917AB5BF262CFACF00E123EA /* RegisterTextView.swift */; };
 		917AB5C5262D9CE700E123EA /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 917AB5C4262D9CE700E123EA /* RegisterView.swift */; };
 		91981CC7262DA7D200223FA6 /* ColorCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91981CC6262DA7D200223FA6 /* ColorCollectionViewController.swift */; };
 		91981CCD262DAFA500223FA6 /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91981CCC262DAFA500223FA6 /* ColorCollectionViewCell.swift */; };
+		91981CD5262F263200223FA6 /* CardInfoTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91981CD4262F263200223FA6 /* CardInfoTextView.swift */; };
 		9199DE9D26217EFB00168E44 /* complete.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9199DE9C26217EFB00168E44 /* complete.mp3 */; };
 		91B3EEE0261838D50096519B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEDF261838D50096519B /* AppDelegate.swift */; };
 		91B3EEE2261838D50096519B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B3EEE1261838D50096519B /* SceneDelegate.swift */; };
@@ -75,10 +75,10 @@
 		9176F578261A777A00F6FA23 /* RegisterTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTextLabel.swift; sourceTree = "<group>"; };
 		9176F588261A87DA00F6FA23 /* TaskData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskData.swift; sourceTree = "<group>"; };
 		9176F58E261B3CC800F6FA23 /* CellTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellTextLabel.swift; sourceTree = "<group>"; };
-		917AB5BF262CFACF00E123EA /* RegisterTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTextView.swift; sourceTree = "<group>"; };
 		917AB5C4262D9CE700E123EA /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		91981CC6262DA7D200223FA6 /* ColorCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewController.swift; sourceTree = "<group>"; };
 		91981CCC262DAFA500223FA6 /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
+		91981CD4262F263200223FA6 /* CardInfoTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfoTextView.swift; sourceTree = "<group>"; };
 		9199DE9C26217EFB00168E44 /* complete.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = complete.mp3; sourceTree = "<group>"; };
 		91B3EEDC261838D50096519B /* TaskPomodoro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskPomodoro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B3EEDF261838D50096519B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -160,7 +160,6 @@
 			children = (
 				9176F56E261A75C000F6FA23 /* RegisterTextField.swift */,
 				9176F578261A777A00F6FA23 /* RegisterTextLabel.swift */,
-				917AB5BF262CFACF00E123EA /* RegisterTextView.swift */,
 				917AB5C4262D9CE700E123EA /* RegisterView.swift */,
 			);
 			path = Register;
@@ -174,6 +173,7 @@
 				91B3EF2F26184B5D0096519B /* CardInfoLabel.swift */,
 				91B3EF3426184B790096519B /* CardImageView.swift */,
 				91162E09262A44DC00BDA579 /* PieChartView.swift */,
+				91981CD4262F263200223FA6 /* CardInfoTextView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -537,12 +537,12 @@
 				91B3EF4D26184C200096519B /* UIButton-Extention.swift in Sources */,
 				9176F56F261A75C000F6FA23 /* RegisterTextField.swift in Sources */,
 				91B3EF3026184B5D0096519B /* CardInfoLabel.swift in Sources */,
+				91981CD5262F263200223FA6 /* CardInfoTextView.swift in Sources */,
 				91B3EEE4261838D50096519B /* HomeViewController.swift in Sources */,
 				91981CCD262DAFA500223FA6 /* ColorCollectionViewCell.swift in Sources */,
 				9176F579261A777A00F6FA23 /* RegisterTextLabel.swift in Sources */,
 				91B3EEE0261838D50096519B /* AppDelegate.swift in Sources */,
 				9176F56A261A717500F6FA23 /* RegisterTaskViewController.swift in Sources */,
-				917AB5C0262CFACF00E123EA /* RegisterTextView.swift in Sources */,
 				917AB5C5262D9CE700E123EA /* RegisterView.swift in Sources */,
 				91B3EF4326184BC00096519B /* UIView-Extention.swift in Sources */,
 				9176C3112618671C0005EF58 /* CommonConst.swift in Sources */,

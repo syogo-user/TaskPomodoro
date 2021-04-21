@@ -10,12 +10,10 @@ import RealmSwift
 class HomeViewController: UIViewController {
 
     let realm = try! Realm()
-    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
-    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
-    
     let cardView = UIView()
     let bottomControlView = BottomControlView()
-    
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
+    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +54,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.pushViewController(taskListController, animated: true)
     }
     @objc func tapAdd(){
+        timerAllStop()
         //タスクを追加
         //画面遷移
         let taskListController = TaskListViewController()

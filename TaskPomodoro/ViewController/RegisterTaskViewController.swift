@@ -9,39 +9,40 @@ import UIKit
 import RealmSwift
 class RegisterTaskViewController:UIViewController{
     
-    var colorArrayIndex = 0
-    let realm = try! Realm()
+    let realm = try! Realm()    
     var task :TaskData!
-    
-    private let titleLabel = RegisterTextLabel(text: "タイトル")
-    private let contentLabel = RegisterTextLabel(text: "内容")
-    private let titleTextField = RegisterTextField(placeHolder: "タイトル")
-    private let contentTextView = RegisterTextView(text:"内容")
-    
     var titleText = ""
     var contentText = ""
-    
     var colorChoiceAfterFlg = false
+    var colorArrayIndex = 0
+    
+    private let titleLabel = RegisterTextLabel(text: "タイトル")
+    private let subTitleLabel = RegisterTextLabel(text: "サブタイトル")
+    private let titleTextField = RegisterTextField(placeHolder: "タイトル")
+    private let subTitleTextField = RegisterTextField(placeHolder: "サブタイトル")
     private let colorChoiceButton = UIButton(type:.system).createButton(title: "背景色変更",fontSize: 18,textColor:CommonConst.lightClearGray)
     private let registerButton = UIButton(type:.system).createButton(title: "更新",fontSize: 25,textColor: CommonConst.lightClearGray)
     private let colorView = RegisterView(colorIndex: 0)
+    private var maxWordCount: Int = 50
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        registerButton.addTarget(self, action: #selector(tapRegisterButton), for: .touchUpInside)
-        colorChoiceButton.addTarget(self, action: #selector(tapColorChoiceButton), for: .touchUpInside)
+        self.view.backgroundColor = .white
+        self.registerButton.addTarget(self, action: #selector(tapRegisterButton), for: .touchUpInside)
+        self.colorChoiceButton.addTarget(self, action: #selector(tapColorChoiceButton), for: .touchUpInside)
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapView))
-        view.addGestureRecognizer(gesture)
-        self.navigationController?.navigationBar.isHidden = false
+        self.view.addGestureRecognizer(gesture)
         //戻るの非表示
         self.navigationController?.navigationBar.topItem?.title = ""
+        self.navigationItem.title = "更新画面"
+        self.navigationController?.navigationBar.isHidden = false
         let addBarButtonItem = UIBarButtonItem(title: "5分休憩", style: UIBarButtonItem.Style.plain, target: self, action: #selector(tapHaveABreak))
-        navigationItem.rightBarButtonItems = [addBarButtonItem]
+        self.navigationItem.rightBarButtonItems = [addBarButtonItem]
         self.navigationController?.navigationBar.tintColor = CommonConst.lightClearGray
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.lightClearGray]
-        self.navigationItem.title = "更新画面"
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -66,9 +67,9 @@ class RegisterTaskViewController:UIViewController{
     private func setLayout(){
         
         titleLabel.anchor(height:50)
-        contentLabel.anchor(height:50)
+        subTitleLabel.anchor(height:50)
         titleTextField.anchor(height:50)
-        contentTextView.anchor(height:100)
+        subTitleTextField.anchor(height:50)
         
         
         colorView.anchor(height:60)
@@ -76,8 +77,10 @@ class RegisterTaskViewController:UIViewController{
         horizonStackView.axis  = .horizontal
         horizonStackView.spacing = 20
         
-        let stackView = UIStackView(arrangedSubviews: [titleLabel,titleTextField,contentLabel,contentTextView,horizonStackView])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel,titleTextField,subTitleLabel,subTitleTextField,horizonStackView])
         stackView.axis = .vertical
+
+        stackView.setCustomSpacing(30, after: subTitleTextField)
         view.addSubview(stackView)
         view.addSubview(registerButton)
 
@@ -89,12 +92,12 @@ class RegisterTaskViewController:UIViewController{
         
         if colorChoiceAfterFlg {
             titleTextField.text = titleText
-            contentTextView.text = contentText
+            subTitleTextField.text = contentText
             //グラデーションの設定
             colorView.setGradentColor(colorIndex:self.colorArrayIndex)
         }else{
             titleTextField.text = task.title
-            contentTextView.text = task.content
+            subTitleTextField.text = task.content
             //グラデーションの設定
             colorView.setGradentColor(colorIndex:task.colorIndex)
         }
@@ -104,17 +107,12 @@ class RegisterTaskViewController:UIViewController{
     }
     @objc private func tapRegisterButton(){
         
-        if self.titleTextField.text == ""{
-            //メッセージを表示
-            let dialog = UIAlertController(title: "タイトルを入力してください", message: "", preferredStyle: .alert)
-            dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(dialog, animated: true, completion: nil)
-            return
-        }
+        validationCheck()
+        
         //登録処理
         try! realm.write{
             self.task.title = self.titleTextField.text ?? ""
-            self.task.content = self.contentTextView.text ?? ""
+            self.task.content = self.subTitleTextField.text ?? ""
             self.task.time = 0
             self.task.breakFlg = 0 //休憩以外
             self.task.colorIndex = self.colorArrayIndex //グラデーション
@@ -127,9 +125,31 @@ class RegisterTaskViewController:UIViewController{
         let viewController = ColorCollectionViewController()
         viewController.modalPresentationStyle = .fullScreen
         viewController.titleText = self.titleTextField.text ?? ""
-        viewController.contentText = self.contentTextView.text ?? ""
+        viewController.contentText = self.subTitleTextField.text ?? ""
         self.present(viewController, animated:true, completion: nil)
 
     }
+    private func validationCheck(){
+        if self.titleTextField.text == ""{
+            //メッセージを表示
+            let dialog = UIAlertController(title: "タイトルを入力してください", message: "", preferredStyle: .alert)
+            dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(dialog, animated: true, completion: nil)
+            return
+        }
+        if self.titleTextField.text?.count ?? 0 > 12{
+            let dialog = UIAlertController(title: "タイトルは12文字までです", message: "", preferredStyle: .alert)
+            dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(dialog, animated: true, completion: nil)
+            return
+        }
+        if self.subTitleTextField.text?.count ?? 0 > 20{
+            let dialog = UIAlertController(title: "サブタイトルは20文字までです", message: "", preferredStyle: .alert)
+            dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(dialog, animated: true, completion: nil)
+            return
+        }
+    }
     
 }
+

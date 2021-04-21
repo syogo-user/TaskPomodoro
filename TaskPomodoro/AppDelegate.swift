@@ -20,12 +20,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         // Override point for customization after application launch.
-//        //初期表示画面
-//        let rootViewController = HomeViewController()
-//        myNavigationController = UINavigationController(rootViewController: rootViewController)
-//        window = UIWindow(frame: UIScreen.main.bounds)
-//        window?.makeKeyAndVisible()
-//        window?.rootViewController = myNavigationController
         return true
     }
 

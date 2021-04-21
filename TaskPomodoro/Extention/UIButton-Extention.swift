@@ -18,16 +18,5 @@ extension UIButton{
         self.setTitleColor(textColor, for: .normal)
         return self
     }
-    
-//    func createRegisterButton(title:String) -> UIButton {
-//        self.setTitle(title, for: .normal)
-//        self.titleLabel?.font = .systemFont(ofSize: 25)
-//        return self
-//    }
-//    func createStartStopButton(title:String) -> UIButton{
-//        self.setTitle(title, for: .normal)
-//        self.titleLabel?.font = .systemFont(ofSize: 30)
-//        self.setTitleColor(.white, for: .normal)
-//        return self
-//    }
+
 }
