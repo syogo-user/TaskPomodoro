@@ -1,0 +1,5 @@
+# TaskPomodoro
+# Usage
+```
+$ pod install
+```
