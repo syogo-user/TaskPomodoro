@@ -1,5 +1,5 @@
 # TaskPomodoro
 # Usage
 ```
-$ pod install
+pod install
 ```
