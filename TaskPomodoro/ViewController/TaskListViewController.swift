@@ -8,7 +8,8 @@
 import UIKit
 import RealmSwift
 import ContextMenuSwift
-class TaskListViewController:UIViewController{
+
+class TaskListViewController: UIViewController {
     
     let realm = try! Realm()
     let sectionTitleArray = ["タスク","完了"]
@@ -26,8 +27,6 @@ class TaskListViewController:UIViewController{
         tableView.tableFooterView = UIView()
         return tableView
     }()
-
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +49,7 @@ class TaskListViewController:UIViewController{
         self.navigationItem.title = "一覧"
 
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
@@ -58,7 +58,8 @@ class TaskListViewController:UIViewController{
         //遷移するか判定
         transitionJudge()
     }
-    @objc func addBarButtonTapped(){
+    
+    @objc func addBarButtonTapped() {
         //タスクのIdを設定
         let task = TaskData()
         let allTasks = realm.objects(TaskData.self)
@@ -74,15 +75,16 @@ class TaskListViewController:UIViewController{
         registerTask.task = task
         self.navigationController?.pushViewController(registerTask, animated: true)
     }
-    @objc func longPress(_ recognizer:UILongPressGestureRecognizer){
+    
+    @objc func longPress(_ recognizer: UILongPressGestureRecognizer){
         //長押し
         // 押された位置でcellのPathを取得
         let point = recognizer.location(in: tableView)
         let indexPath = tableView.indexPathForRow(at: point)
 
-        if indexPath == nil{
+        if indexPath == nil {
             return
-        }else if recognizer.state == UIGestureRecognizer.State.began{
+        } else if recognizer.state == UIGestureRecognizer.State.began {
             //長押し時の呼び出しメソッドは長押し開始と終了の2回呼び出されるのでbeganの場合のみ実行
             let delete = ContextMenuItemWithImage(title: "削除", image: UIImage(systemName: "trash")!)
             //コンテキストメニューに表示するアイテムを決定します
@@ -92,25 +94,27 @@ class TaskListViewController:UIViewController{
                         delegate: self,
                         animated: true)
         }
-        
     }
-    private func transitionJudge(){
+    
+    private func transitionJudge() {
         if self.transition{
             self.transition = false
             addBarButtonTapped()
         }
     }
 }
+
 extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionTitleArray.count
     }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitleArray[section]
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0{
+        if section == 0 {
             return taskDataArray.count
         } else {
             return taskCompleteArray.count
@@ -119,9 +123,9 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomTablViewCell
-        if indexPath.section == 0{
+        if indexPath.section == 0 {
             cell.setData(task: taskDataArray[indexPath.row])
-        }else{
+        } else {
             cell.setData(task: taskCompleteArray[indexPath.row])
         }
 
@@ -129,13 +133,13 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {        
-        if indexPath.section == 0{
+        if indexPath.section == 0 {
             //タスク
             //画面遷移
             let registerTask = RegisterTaskViewController()
             registerTask.task = taskDataArray[indexPath.row]
             self.navigationController?.pushViewController(registerTask, animated: true)
-        }else{
+        } else {
             //完了
             //画面遷移
             let registerTask = RegisterTaskViewController()
@@ -144,8 +148,9 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
     }
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if sourceIndexPath.section == 0{
+        if sourceIndexPath.section == 0 {
             //並び替え処理
             try! realm.write {
                 let sourceObject = taskDataArray[sourceIndexPath.row]
@@ -159,7 +164,7 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
                     }
                 } else {
                     // 下から上に移動した場合、間の項目を下にシフト
-                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed(){
+                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed() {
                         let object = taskDataArray[index]
                         object.orderNo += 1
                     }
@@ -167,7 +172,7 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
                 // 移動したセルの並びを移動先に更新
                 sourceObject.orderNo = destinationObjectOrder
             }
-        }else{
+        } else {
             //並び替え処理
             try! realm.write {
                 let sourceObject = taskCompleteArray[sourceIndexPath.row]
@@ -192,6 +197,7 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
     }
+    
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         //セクションをまたぐ並び替えを禁止
         if sourceIndexPath.section == proposedDestinationIndexPath.section {
@@ -199,13 +205,13 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return sourceIndexPath
     }
+    
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
-
 }
-extension TaskListViewController : ContextMenuDelegate{
 
+extension TaskListViewController : ContextMenuDelegate {
     
     func contextMenuDidSelect(_ contextMenu: ContextMenu,
                               cell: ContextMenuCell,
@@ -223,15 +229,15 @@ extension TaskListViewController : ContextMenuDelegate{
         var arrayIndex = 0
         var taskDataArrayFlg :Bool = true
         //idから配列のインデックスを取得
-        for (index,task) in taskDataArray.enumerated(){
+        for (index,task) in taskDataArray.enumerated() {
             if task.id == id{
                 arrayIndex = index
                 taskDataArrayFlg = true
             }
         }
         
-        for (index,task) in taskCompleteArray.enumerated(){
-            if task.id == id{
+        for (index,task) in taskCompleteArray.enumerated() {
+            if task.id == id {
                 arrayIndex = index
                 taskDataArrayFlg = false
             }
@@ -240,17 +246,18 @@ extension TaskListViewController : ContextMenuDelegate{
         try! realm.write {
             if taskDataArrayFlg {
                 self.realm.delete(taskDataArray[arrayIndex])
-            }else{
+            } else {
                 self.realm.delete(taskCompleteArray[arrayIndex])
             }
         }
         self.tableView.reloadData()
         return true
-        
     }
+    
     func contextMenuDidAppear(_ contextMenu: ContextMenu) {
         print("コンテキストメニューが表示されました")
     }
+    
     func contextMenuDidDisappear(_ contextMenu: ContextMenu) {
         print("コンテキストメニューが消えました")
     }
@@ -260,33 +267,30 @@ extension TaskListViewController : ContextMenuDelegate{
     }
 }
 
-
-
-
-class CustomTablViewCell:UITableViewCell{
+class CustomTablViewCell: UITableViewCell {
     var id = 0
-    let title = CellTextLabel(text: "タイトル",fontSize: 21.0,textColor: .gray)
-    let content = CellTextLabel(text: "コンテンツ",fontSize: 17.0,textColor: .lightGray)
+    let title = CellTextLabel(text: "タイトル", fontSize: 21.0,textColor: .gray)
+    let content = CellTextLabel(text: "コンテンツ", fontSize: 17.0,textColor: .lightGray)
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
 
-        let stackview = UIStackView(arrangedSubviews: [title,content])
+        let stackview = UIStackView(arrangedSubviews: [title, content])
         stackview.axis = .vertical
         stackview.distribution = .fillEqually
         addSubview(stackview)
         title.anchor()
-        stackview.anchor(top:self.topAnchor,bottom:self.bottomAnchor,left:self.leftAnchor,right: self.rightAnchor,topPdding:5,bottomPdding: 5,leftPdding:20,rightPdding: 20)
+        stackview.anchor(top:self.topAnchor, bottom: self.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, topPdding: 5, bottomPdding: 5, leftPdding: 20, rightPdding: 20)
         
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func setData(task:TaskData){
+    
+    func setData(task: TaskData) {
         self.id = task.id
         self.title.text = task.title
         self.content.text = task.content        
     }
-    
-
 }

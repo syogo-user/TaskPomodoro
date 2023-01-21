@@ -6,18 +6,19 @@
 //
 
 import UIKit
-class CellTextLabel:UILabel {
-    init(text:String) {
+
+class CellTextLabel: UILabel {
+    init(text: String) {
         super.init(frame: .zero)
         self.text = text
         self.textColor = .darkGray
         self.font = .systemFont(ofSize: 17)
     }
-    init(text:String,fontSize:CGFloat,textColor:UIColor) {
+    init(text: String, fontSize: CGFloat, textColor: UIColor) {
         super.init(frame: .zero)
         self.text = text
         self.textColor = textColor
-        self.font = .systemFont(ofSize:fontSize)
+        self.font = .systemFont(ofSize: fontSize)
     }
     
     required init?(coder: NSCoder) {

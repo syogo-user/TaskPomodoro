@@ -6,9 +6,10 @@
 //
 
 import UIKit
-class CardInfoLabel:UILabel{
+
+class CardInfoLabel: UILabel {
     //nopeとgoodのラベル
-    init(text :String,textColor:UIColor) {
+    init(text: String, textColor: UIColor) {
         super.init(frame: .zero)
         font = .boldSystemFont(ofSize: 45)
         self.text = text
@@ -19,17 +20,17 @@ class CardInfoLabel:UILabel{
         textAlignment = .center
         alpha = 0
     }
+    
     //その他のtextColorのラベル
-    init(labelText:String,labelFont:UIFont) {
+    init(labelText: String, labelFont: UIFont) {
         super.init(frame: .zero)
         font = labelFont
         textColor = .white
         textAlignment = .center
         text = labelText
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }

@@ -6,8 +6,9 @@
 //
 
 import UIKit
-class RegisterTextField :UITextField {
-    init(placeHolder:String) {
+
+class RegisterTextField: UITextField {
+    init(placeHolder: String) {
         super.init(frame: .zero)
         placeholder = placeHolder
         borderStyle = .roundedRect//角丸

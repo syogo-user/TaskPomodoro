@@ -6,17 +6,17 @@
 //
 
 import UIKit
-class CardImageView:UIImageView{
+
+class CardImageView: UIImageView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 10
         contentMode = .scaleAspectFill
-        image = UIImage(named:"blueWing")
+        image = UIImage(named: "blueWing")
         clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
+    }    
 }

@@ -8,14 +8,14 @@
 import UIKit
 class BottomControlView: UIView {
 
-    let list = BottomButtonView(frame: .zero, width: 65,imageName: "list")
-    let addView = BottomButtonView(frame: .zero, width: 65,imageName: "add")
-    let deleteView = BottomButtonView(frame: .zero, width: 65,imageName: "delete")
-    let resetView = BottomButtonView(frame: .zero, width: 65,imageName: "reset")
+    let list = BottomButtonView(frame: .zero, width: 65, imageName: "list")
+    let addView = BottomButtonView(frame: .zero, width: 65, imageName: "add")
+    let deleteView = BottomButtonView(frame: .zero, width: 65, imageName: "delete")
+    let resetView = BottomButtonView(frame: .zero, width: 65, imageName: "reset")
 
-    override init(frame:CGRect){
+    override init(frame: CGRect) {
         super.init(frame:frame)
-        let baseStackView = UIStackView(arrangedSubviews: [list,addView,deleteView,resetView])
+        let baseStackView = UIStackView(arrangedSubviews: [list, addView, deleteView, resetView])
         baseStackView.axis = .horizontal //横
         baseStackView.distribution   = .fillEqually
         baseStackView.spacing = 10
@@ -23,9 +23,9 @@ class BottomControlView: UIView {
         addSubview(baseStackView)
         [
             baseStackView.topAnchor.constraint(equalTo: topAnchor),
-            baseStackView.bottomAnchor.constraint(equalTo:bottomAnchor),
-            baseStackView.leftAnchor.constraint(equalTo: leftAnchor,constant:10),
-            baseStackView.rightAnchor.constraint(equalTo: rightAnchor ,constant: -10),
+            baseStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            baseStackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
+            baseStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
 
         ].forEach {$0.isActive = true}
         
@@ -36,15 +36,15 @@ class BottomControlView: UIView {
     }
 }
 
-class BottomButtonView:UIView{
+class BottomButtonView: UIView{
     //5つある丸いボタンのクラス
     
     var button: BottomButton?
     
-    init(frame: CGRect,width:CGFloat,imageName:String) {
+    init(frame: CGRect, width: CGFloat,imageName: String) {
         super.init(frame: frame)
         
-        button = BottomButton(type:.custom)//customで画像オリジナルの色が表示できる
+        button = BottomButton(type: .custom)//customで画像オリジナルの色が表示できる
         button?.setImage(UIImage(named: imageName)?.resize(size: .init(width: width * 0.4, height: width * 0.4)) , for: .normal)
         button?.translatesAutoresizingMaskIntoConstraints = false
         button?.backgroundColor = .white
@@ -56,7 +56,7 @@ class BottomButtonView:UIView{
         button?.layer.shadowRadius = 15
         
         addSubview(button!)
-        button?.anchor(centerY:centerYAnchor,centerX: centerXAnchor,width: width,height:width)
+        button?.anchor(centerY: centerYAnchor, centerX: centerXAnchor, width: width, height: width)
         
     }
     
@@ -65,9 +65,9 @@ class BottomButtonView:UIView{
     }
 }
 
-class BottomButton:UIButton{
+class BottomButton: UIButton{
     override var isHighlighted: Bool{
-        didSet{
+        didSet {
             if isHighlighted {
                 //ハイライトのとき(タップしている瞬間)
                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: []) {
@@ -75,7 +75,7 @@ class BottomButton:UIButton{
                     self.layoutIfNeeded()
                 }
 
-            }else {
+            } else {
                 //ハイライトじゃないとき(タップしていないとき)
                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: []) {
                     self.transform = .identity //元のおおきさに戻る

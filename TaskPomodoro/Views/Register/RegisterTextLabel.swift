@@ -6,7 +6,8 @@
 //
 
 import UIKit
-class RegisterTextLabel:UILabel {
+
+class RegisterTextLabel: UILabel {
     init(text:String) {
         super.init(frame: .zero)
         self.text = text
@@ -14,7 +15,6 @@ class RegisterTextLabel:UILabel {
         self.font = .systemFont(ofSize: 18)
     }
 
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

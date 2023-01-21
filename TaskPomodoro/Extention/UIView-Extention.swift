@@ -6,7 +6,7 @@
 //
 
 import UIKit
-extension UIView{
+extension UIView {    
     func anchor(
         top:NSLayoutYAxisAnchor? = nil,
         bottom:NSLayoutYAxisAnchor? = nil,
@@ -19,7 +19,8 @@ extension UIView{
         topPdding:CGFloat = 0,
         bottomPdding:CGFloat = 0,
         leftPdding:CGFloat = 0,
-        rightPdding:CGFloat = 0){
+        rightPdding:CGFloat = 0
+    ) {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         
@@ -32,27 +33,21 @@ extension UIView{
             self.bottomAnchor.constraint(equalTo: bottom, constant: -bottomPdding).isActive = true
         }
         if let left = left {
-
             self.leftAnchor.constraint(equalTo: left, constant: leftPdding).isActive = true
         }
-        if let right = right  {
-
+        if let right = right {
             self.rightAnchor.constraint(equalTo: right, constant: -rightPdding).isActive = true
         }
         if let centerY = centerY {
-
             self.centerYAnchor.constraint(equalTo: centerY).isActive = true
         }
         if let centerX = centerX {
-
             self.centerXAnchor.constraint(equalTo: centerX).isActive = true
         }
         if let width = width {
-
             self.widthAnchor.constraint(equalToConstant: width).isActive = true
         }
         if let height = height {
-
             self.heightAnchor.constraint(equalToConstant: height).isActive = true
         }
     }
@@ -60,7 +55,7 @@ extension UIView{
 
 //MARK:Animations
 extension UIView{
-    func removeCardViewAnimation(x:CGFloat){
+    func removeCardViewAnimation(x: CGFloat) {
         //消える動作
         UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.7, options:[]) {
             let degree : CGFloat = x / 40

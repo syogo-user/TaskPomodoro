@@ -6,7 +6,8 @@
 //
 
 import UIKit
-class CardInfoTextView:UITextView{
+
+class CardInfoTextView: UITextView {
     
     init(text:String) {
         super.init(frame: CGRect.zero, textContainer: nil)

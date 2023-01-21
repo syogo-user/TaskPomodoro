@@ -13,6 +13,7 @@ protocol backgroundTimerDelegate: class {
     func checkBackground()
     var timerIsBackground:Bool { set get }
 }
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
