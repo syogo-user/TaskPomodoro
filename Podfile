@@ -6,7 +6,7 @@ target 'TaskPomodoro' do
   use_frameworks!
 
   # Pods for TaskPomodoro
-  pod 'RealmSwift'
+  pod 'RealmSwift','10.34.0'
   pod 'ContextMenuSwift'
 
   target 'TaskPomodoroTests' do
