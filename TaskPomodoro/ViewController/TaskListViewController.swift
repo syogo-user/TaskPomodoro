@@ -13,8 +13,10 @@ class TaskListViewController: UIViewController {
     
     let realm = try! Realm()
     let sectionTitleArray = ["タスク","完了"]
-    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
-    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
+    // 未完了タスク
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("isComplete == false")
+    // 完了済タスク
+    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("isComplete == true")
     var transition :Bool = false
     private let cellId = "cellId"
 
@@ -30,54 +32,44 @@ class TaskListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(CustomTablViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.isEditing = true //セル並び替え可能
         tableView.allowsSelectionDuringEditing = true //セル選択可能
-        
-        //長押し
+
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
         tableView.addGestureRecognizer(longPressRecognizer)        
         self.view.addSubview(tableView)
-        
-        
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonTapped))
         navigationItem.rightBarButtonItems = [addBarButtonItem]
         self.navigationController?.navigationBar.tintColor = CommonConst.lightClearGray
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: CommonConst.lightClearGray]
-        //戻るの非表示
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationItem.title = "一覧"
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
         self.navigationController?.navigationBar.isHidden = false
-
-        //遷移するか判定
         transitionJudge()
     }
     
     @objc func addBarButtonTapped() {
-        //タスクのIdを設定
+        // タスクのIdを設定
         let task = TaskData()
         let allTasks = realm.objects(TaskData.self)
         if  allTasks.count != 0{
             let no = allTasks.max(ofProperty: "id")! + 1
             task.id = no
-            task.orderNo = no //ソート用
+            task.orderNo = no
         }
-        
-        //画面遷移
+
         let registerTask = RegisterTaskViewController()
-        
         registerTask.task = task
         self.navigationController?.pushViewController(registerTask, animated: true)
     }
     
     @objc func longPress(_ recognizer: UILongPressGestureRecognizer){
-        //長押し
         // 押された位置でcellのPathを取得
         let point = recognizer.location(in: tableView)
         let indexPath = tableView.indexPathForRow(at: point)
@@ -85,11 +77,9 @@ class TaskListViewController: UIViewController {
         if indexPath == nil {
             return
         } else if recognizer.state == UIGestureRecognizer.State.began {
-            //長押し時の呼び出しメソッドは長押し開始と終了の2回呼び出されるのでbeganの場合のみ実行
+            // 長押し時の呼び出しメソッドは長押し開始と終了の2回呼び出されるのでbeganの場合のみ実行
             let delete = ContextMenuItemWithImage(title: "削除", image: UIImage(systemName: "trash")!)
-            //コンテキストメニューに表示するアイテムを決定します
             CM.items = [delete]
-            //表示します
             CM.showMenu(viewTargeted: tableView.cellForRow(at: indexPath!)!,
                         delegate: self,
                         animated: true)
@@ -122,31 +112,27 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomTablViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CustomTableViewCell
         if indexPath.section == 0 {
             cell.setData(task: taskDataArray[indexPath.row])
         } else {
             cell.setData(task: taskCompleteArray[indexPath.row])
         }
-
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {        
         if indexPath.section == 0 {
-            //タスク
-            //画面遷移
+            // 未完了タスク
             let registerTask = RegisterTaskViewController()
             registerTask.task = taskDataArray[indexPath.row]
             self.navigationController?.pushViewController(registerTask, animated: true)
         } else {
-            //完了
-            //画面遷移
+            // 完了済タスク
             let registerTask = RegisterTaskViewController()
             registerTask.task = taskCompleteArray[indexPath.row]
             self.navigationController?.pushViewController(registerTask, animated: true)
         }
-        
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -173,7 +159,7 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
                 sourceObject.orderNo = destinationObjectOrder
             }
         } else {
-            //並び替え処理
+            // 並び替え処理
             try! realm.write {
                 let sourceObject = taskCompleteArray[sourceIndexPath.row]
                 let destinationObject = taskCompleteArray[destinationIndexPath.row]
@@ -195,11 +181,10 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
                 sourceObject.orderNo = destinationObjectOrder
             }
         }
-
     }
     
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        //セクションをまたぐ並び替えを禁止
+        // セクションをまたぐ並び替えを禁止
         if sourceIndexPath.section == proposedDestinationIndexPath.section {
             return proposedDestinationIndexPath
         }
@@ -211,24 +196,23 @@ extension TaskListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension TaskListViewController : ContextMenuDelegate {
+extension TaskListViewController: ContextMenuDelegate {
     
     func contextMenuDidSelect(_ contextMenu: ContextMenu,
                               cell: ContextMenuCell,
                               targetedView: UIView,
                               didSelect item: ContextMenuItem,
                               forRowAt index: Int) -> Bool {
+
+        // 長押しされたセルを、型を再指定して読み込む
+        let pressedTableCell = targetedView as! CustomTableViewCell
         
-        //削除処理
-        //長押しされたセルを、型を再指定して読み込む
-        let pressedTableCell = targetedView as! CustomTablViewCell
-        
-        //セル内の情報を取得したい場合
+        // セル内の情報を取得したい場合
         let id = pressedTableCell.id
         
         var arrayIndex = 0
-        var taskDataArrayFlg :Bool = true
-        //idから配列のインデックスを取得
+        var taskDataArrayFlg: Bool = true
+        // idから配列のインデックスを取得
         for (index,task) in taskDataArray.enumerated() {
             if task.id == id{
                 arrayIndex = index
@@ -263,11 +247,10 @@ extension TaskListViewController : ContextMenuDelegate {
     }
     
     func contextMenuDidDeselect(_ contextMenu: ContextMenu, cell: ContextMenuCell, targetedView: UIView, didSelect item: ContextMenuItem, forRowAt index: Int) {
-        print("")
     }
 }
 
-class CustomTablViewCell: UITableViewCell {
+class CustomTableViewCell: UITableViewCell {
     var id = 0
     let title = CellTextLabel(text: "タイトル", fontSize: 21.0,textColor: .gray)
     let content = CellTextLabel(text: "コンテンツ", fontSize: 17.0,textColor: .lightGray)
@@ -275,12 +258,12 @@ class CustomTablViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
 
-        let stackview = UIStackView(arrangedSubviews: [title, content])
-        stackview.axis = .vertical
-        stackview.distribution = .fillEqually
-        addSubview(stackview)
+        let stackView = UIStackView(arrangedSubviews: [title, content])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        addSubview(stackView)
         title.anchor()
-        stackview.anchor(top:self.topAnchor, bottom: self.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, topPdding: 5, bottomPdding: 5, leftPdding: 20, rightPdding: 20)
+        stackView.anchor(top:self.topAnchor, bottom: self.bottomAnchor, left: self.leftAnchor, right: self.rightAnchor, topPadding: 5, bottomPadding: 5, leftPadding: 20, rightPadding: 20)
         
     }
     

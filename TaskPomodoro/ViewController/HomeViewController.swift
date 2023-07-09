@@ -13,8 +13,10 @@ class HomeViewController: UIViewController {
     let realm = try! Realm()
     let cardView = UIView()
     let bottomControlView = BottomControlView()
-    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 0")//未完了タスク
-    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("completeFlg == 1")//完了タスク
+    // 未完了タスク
+    var taskDataArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("isComplete == false")
+    // 完了タスク
+    var taskCompleteArray = try! Realm().objects(TaskData.self).sorted(byKeyPath: "orderNo", ascending: true).filter("isComplete == true")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +34,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
-    //カードがすでにviewに存在する場合、一度クリアする
+    // カードがすでにviewに存在する場合、一度クリアする
     private func removeCardInfo() {
         self.removeAllSubviews(parentView: cardView)
     }
@@ -42,7 +44,7 @@ class HomeViewController: UIViewController {
             let card = CardView(task: task)
             card.taskProcessDelegate = self//デリゲート
             
-            //cardにタグ(taskのid)をつける
+            // cardにタグ(taskのid)をつける
             card.tag = task.id
             self.cardView.addSubview(card)
             card.anchor(top:self.cardView.topAnchor,bottom: self.cardView.bottomAnchor,left: self.cardView.leftAnchor,right: self.cardView.rightAnchor)
@@ -76,14 +78,13 @@ class HomeViewController: UIViewController {
         //メッセージを表示
         let dialog = UIAlertController(title: "削除してもよろしいですか？", message: "", preferredStyle: .alert)
         dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in
-            //タイマーが起動している場合は止める
+            // タイマーが起動している場合は止める
             self.timerAllStop()
-            //配列の先頭データを削除
+            // 配列の先頭データを削除
             try! self.realm.write() {
                 self.realm.delete(self.taskDataArray[0])
             }
 
-            //再描画
             self.removeCardInfo()
             self.setCardInfo()
         }))
@@ -93,23 +94,23 @@ class HomeViewController: UIViewController {
     
     @objc func tapReset() {
         if taskDataArray.count == 0 {
-            //taskDataArrayが0件の場合は処理を行わない
+            // taskDataArrayが0件の場合は処理を行わない
             return
         }
-        //タイマーが起動している場合は止める
+        // タイマーが起動している場合は止める
         timerAllStop()
-        //リセット
+        // リセット
         try! realm.write() {
-            //経過時間を0にリセット
+            // 経過時間を0にリセット
             taskDataArray[0].time = 0
-            //再描画
+            // 再描画
             removeCardInfo()
             setCardInfo()
         }
     }
     
     private func timerAllStop() {
-        //タイマーが起動している場合は止める
+        // タイマーが起動している場合は止める
         let subviews = self.cardView.subviews
         for subview in subviews {
             if subview is CardView{
@@ -124,7 +125,7 @@ class HomeViewController: UIViewController {
 
         let stackView  = UIStackView(arrangedSubviews: [cardView,bottomControlView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical //縦
+        stackView.axis = .vertical
         self.view.addSubview(stackView)
         [
             bottomControlView.heightAnchor.constraint(equalToConstant: 120),
@@ -144,32 +145,29 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: TaskProcessDelegate {
-    //カードが消えるときの動作
+    // カードが消えるときの動作
     func taskProcess(complete: Bool, id: Int) {
         if complete {
-            //完了の場合
+            // 完了の場合
             completeProcess(id: id)
         }else {
-            //あとでの場合
-            //一番うしろに並び替え
+            // あとでの場合
             sortTask(id: id)
         }
     }
     
     //「あとで」の処理
     private func sortTask(id: Int) {
-        
-        var arrayIndex = 0 //選択したカードの配列のインデックスを設定する変数
+        var arrayIndex = 0
         let lastIndex = taskDataArray.count - 1
-        
-        //idから配列のindexを取得
+        // idから配列のindexを取得
         for (index,task) in taskDataArray.enumerated() {
             if task.id == id {
                 arrayIndex = index
             }
         }
         
-        //並び替え処理
+        // 並び替え処理
         try! realm.write {
             let sourceObject = taskDataArray[arrayIndex]
             let destinationObject = taskDataArray[lastIndex]
@@ -182,26 +180,23 @@ extension HomeViewController: TaskProcessDelegate {
             }
             // 移動したセルの並びを移動先に更新
             sourceObject.orderNo = destinationObjectOrder
-                        
-            //再描画
+
             removeCardInfo()
             setCardInfo()
         }
     }
-    
-    //「完了」の処理
+
     private func completeProcess(id: Int) {
-        var arrayIndex = 0 //選択したカードの配列のインデックスを設定する変数
-        //idから配列のindexを取得
+        // 選択したカードの配列のインデックスを設定する変数
+        var arrayIndex = 0
+        // idから配列のindexを取得
         for (index,task) in taskDataArray.enumerated() {
             if task.id == id {
                 arrayIndex = index
             }
         }
-
-        //completeFlgに1を立てる//完了のフラグ
         try! realm.write {
-            taskDataArray[arrayIndex].completeFlg = 1
+            taskDataArray[arrayIndex].isComplete = true
         }
     }
 }

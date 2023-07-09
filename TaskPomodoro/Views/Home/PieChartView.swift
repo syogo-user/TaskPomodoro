@@ -10,7 +10,6 @@ import UIKit
 @IBDesignable class PieChartView : UIView {
     
     // MARK: Public Inspectable Properties
-    
     @IBInspectable var maxValue: CGFloat = 1500.0 {
         didSet {
             setup()
@@ -50,7 +49,6 @@ import UIKit
     @IBInspectable var animationDuration: Double = 2.8
      
     // MARK: Public Functions
-    
     func set(value: CGFloat, maxValue: CGFloat, animated: Bool = true) {
         set(rect: centerSquareRect(bounds), value: value, maxValue: maxValue, animated: animated)
     }    
@@ -64,7 +62,6 @@ import UIKit
     }
     
     // MARK: Draw
-    
     override func draw(_ rect: CGRect) {
         let pieChartRect = centerSquareRect(rect)
         setChartBackground(rect: pieChartRect)
@@ -72,13 +69,11 @@ import UIKit
     }
     
     // MARK: Private Properties
-    
     private var tintShapeLayer: CAShapeLayer?
     
     private let pi = CGFloat(Double.pi)
     
-    // MARK: Private Functions
-    
+    // MARK: Private Functions    
     private func set(rect: CGRect, value: CGFloat, maxValue: CGFloat, animated: Bool = true) {
         tintShapeLayer?.removeFromSuperlayer()
         tintShapeLayer = createTintShapeLayer(rect: rect, value: value, maxValue: maxValue)

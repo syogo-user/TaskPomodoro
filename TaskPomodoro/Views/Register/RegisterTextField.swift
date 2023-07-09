@@ -11,7 +11,7 @@ class RegisterTextField: UITextField {
     init(placeHolder: String) {
         super.init(frame: .zero)
         placeholder = placeHolder
-        borderStyle = .roundedRect//角丸
+        borderStyle = .roundedRect
         font = .systemFont(ofSize: 14)
     }
     

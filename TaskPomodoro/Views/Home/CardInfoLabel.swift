@@ -8,7 +8,7 @@
 import UIKit
 
 class CardInfoLabel: UILabel {
-    //nopeとgoodのラベル
+    // nopeとgoodのラベル
     init(text: String, textColor: UIColor) {
         super.init(frame: .zero)
         font = .boldSystemFont(ofSize: 45)
@@ -21,7 +21,7 @@ class CardInfoLabel: UILabel {
         alpha = 0
     }
     
-    //その他のtextColorのラベル
+    // その他のtextColorのラベル
     init(labelText: String, labelFont: UIFont) {
         super.init(frame: .zero)
         font = labelFont
