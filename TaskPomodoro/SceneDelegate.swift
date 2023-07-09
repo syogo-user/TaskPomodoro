@@ -46,17 +46,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // アプリ画面に復帰したとき
     func sceneDidBecomeActive(_ scene: UIScene) {
         if delegate?.timerIsBackground == true {
-            let calender = Calendar(identifier: .gregorian)
+            let calendar = Calendar(identifier: .gregorian)
             let date1 = ud.value(forKey: "date1") as! Date
             let date2 = Date()
-            let elapsedTime = calender.dateComponents([.second], from: date1, to: date2).second!
+            let elapsedTime = calendar.dateComponents([.second], from: date1, to: date2).second!
             delegate?.setCurrentTimer(elapsedTime)
         }
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
     
-    //アプリ画面から離れるとき(ホームボタン押下時,スリープ時)
+    // アプリ画面から離れるとき(ホームボタン押下時, スリープ時)
     func sceneWillResignActive(_ scene: UIScene) {
         ud.set(Date(), forKey: "date1")
         delegate?.checkBackground()

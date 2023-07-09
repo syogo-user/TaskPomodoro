@@ -14,6 +14,7 @@ class CellTextLabel: UILabel {
         self.textColor = .darkGray
         self.font = .systemFont(ofSize: 17)
     }
+    
     init(text: String, fontSize: CGFloat, textColor: UIColor) {
         super.init(frame: .zero)
         self.text = text

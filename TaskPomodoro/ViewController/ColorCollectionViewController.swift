@@ -8,12 +8,11 @@
 import UIKit
 
 class ColorCollectionViewController: UIViewController{
-
     var titleText = ""
     var contentText = ""
     private let cellId = "cellId"
+
     lazy var collectionView : UICollectionView = {
-        //CollectionViewのサイズ調整
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         
@@ -29,7 +28,7 @@ class ColorCollectionViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(collectionView)
-        collectionView.anchor(top:view.topAnchor,bottom:view.bottomAnchor, left: view.leftAnchor,right:view.rightAnchor,topPdding: 10,bottomPdding: 10, leftPdding: 0,rightPdding: 0)
+        collectionView.anchor(top:view.topAnchor,bottom:view.bottomAnchor, left: view.leftAnchor,right:view.rightAnchor,topPadding: 10,bottomPadding: 10, leftPadding: 0,rightPadding: 0)
                               
     }    
 }
@@ -37,7 +36,6 @@ class ColorCollectionViewController: UIViewController{
 extension ColorCollectionViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //表示するセルの数
         return CommonConst.gradientColor.count
     }
     
@@ -52,10 +50,9 @@ extension ColorCollectionViewController: UICollectionViewDataSource, UICollectio
         let cellSize : CGFloat = self.view.bounds.width / 3 - horizontalSpace
         return CGSize(width: cellSize, height: cellSize)
     }
-    
-    // cell選択時に呼ばれる関数
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //前画面への値の受け渡し
+        // 前画面への値の受け渡し
         let preNC = self.presentingViewController as! UINavigationController
         let preVC = preNC.viewControllers[preNC.viewControllers.count - 1] as! RegisterTaskViewController
         preVC.colorArrayIndex = indexPath.item

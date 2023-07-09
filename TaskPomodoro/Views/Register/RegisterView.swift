@@ -15,7 +15,7 @@ class RegisterView: UIView {
     }
     
     override func layoutSubviews() {
-        //viewが生成されて大きさがわかった段階でここが呼ばれる
+        // viewが生成されて大きさがわかった段階でここが呼ばれる
         gradientLayer.frame = self.bounds
     }
     
@@ -23,9 +23,7 @@ class RegisterView: UIView {
         let color = CommonConst.gradientColor[colorIndex]
         let color1 = color["startColor"] ?? UIColor.white.cgColor
         let color2 = color["endColor"] ??  UIColor.white.cgColor
-        //グラデーション
         gradientLayer.colors = [color1, color2]
-        //グラデーションの位置
         gradientLayer.locations = [0.3, 1.1]
         self.layer.addSublayer(gradientLayer)
     }
