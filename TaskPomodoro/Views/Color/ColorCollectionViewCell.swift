@@ -27,7 +27,6 @@ class ColorCollectionViewCell: UICollectionViewCell {
         let color1 = color["startColor"] ?? UIColor.black.cgColor
         let color2 = color["endColor"] ?? UIColor.black.cgColor
         gradientLayer.colors = [color1, color2]
-        //グラデーションの位置
         gradientLayer.locations = [0.3, 1.1]
         self.layer.addSublayer(gradientLayer)
     }

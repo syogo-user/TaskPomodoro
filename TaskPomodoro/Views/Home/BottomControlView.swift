@@ -6,8 +6,8 @@
 //
 
 import UIKit
-class BottomControlView: UIView {
 
+class BottomControlView: UIView {
     let list = BottomButtonView(frame: .zero, width: 65, imageName: "list")
     let addView = BottomButtonView(frame: .zero, width: 65, imageName: "add")
     let deleteView = BottomButtonView(frame: .zero, width: 65, imageName: "delete")
@@ -28,7 +28,6 @@ class BottomControlView: UIView {
             baseStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
 
         ].forEach {$0.isActive = true}
-        
     }
     
     required init?(coder: NSCoder) {
@@ -37,18 +36,15 @@ class BottomControlView: UIView {
 }
 
 class BottomButtonView: UIView{
-    //5つある丸いボタンのクラス
-    
     var button: BottomButton?
     
     init(frame: CGRect, width: CGFloat,imageName: String) {
         super.init(frame: frame)
         
-        button = BottomButton(type: .custom)//customで画像オリジナルの色が表示できる
+        button = BottomButton(type: .custom)
         button?.setImage(UIImage(named: imageName)?.resize(size: .init(width: width * 0.4, height: width * 0.4)) , for: .normal)
         button?.translatesAutoresizingMaskIntoConstraints = false
         button?.backgroundColor = .white
-        
         button?.layer.cornerRadius = width / 2
         button?.layer.shadowOffset = .init(width: 1.5, height: 2)
         button?.layer.shadowColor = UIColor.black.cgColor
@@ -69,16 +65,16 @@ class BottomButton: UIButton{
     override var isHighlighted: Bool{
         didSet {
             if isHighlighted {
-                //ハイライトのとき(タップしている瞬間)
                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: []) {
-                    self.transform = .init(scaleX: 0.8, y: 0.8) //大きさを0.8倍にしてくれる　アニメーション付き
+                    // 大きさを0.8倍にする
+                    self.transform = .init(scaleX: 0.8, y: 0.8)
                     self.layoutIfNeeded()
                 }
 
             } else {
-                //ハイライトじゃないとき(タップしていないとき)
                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: []) {
-                    self.transform = .identity //元のおおきさに戻る
+                    // 元の大きさに戻す
+                    self.transform = .identity
                     self.layoutIfNeeded()
                 }
             }
@@ -93,6 +89,4 @@ class BottomButton: UIButton{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }
